@@ -1,4 +1,4 @@
-package com.example.bilingual.db.enums;
+package com.example.bilingual.db.model.enums;
 
 public enum ContentFormat {
     AUDIO,

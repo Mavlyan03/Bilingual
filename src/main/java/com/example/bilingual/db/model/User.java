@@ -1,7 +1,7 @@
 package com.example.bilingual.db.model;
 
 
-import com.example.bilingual.db.enums.Role;
+import com.example.bilingual.db.model.enums.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
