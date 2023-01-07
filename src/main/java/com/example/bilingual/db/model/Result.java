@@ -16,4 +16,5 @@ public class Result {
     @SequenceGenerator(name = "result_seq",sequenceName = "result_seq",allocationSize = 1, initialValue = 10)
     @GeneratedValue(generator = "result_seq",strategy = GenerationType.SEQUENCE)
     private Long id;
+    private Float score;
 }
