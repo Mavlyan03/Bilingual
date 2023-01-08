@@ -19,6 +19,7 @@ public class Content {
     private Long id;
 
     private String content;
+
     @Enumerated(EnumType.STRING)
     private ContentFormat contentFormat;
 }
