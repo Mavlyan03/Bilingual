@@ -71,7 +71,7 @@ VALUES (1,1),
        (9,13),
        (9,14);
 
-insert into results (id, date_of_submission, final_score, status, client_id, test_id)
+insert into results (id, date_of_submission, score, status, client_id, test_id)
 VALUES (1, '2022-12-10 20:04:44.794364', 43, 'NOT_EVALUATED', 1, 1);
 
 insert into question_answers (id, number_of_words, score, text_response_user, content_id, question_id, result_id, seen, status, count_of_plays)

@@ -26,7 +26,9 @@ public class Question {
     @Enumerated(EnumType.STRING)
     private QuestionType questionType;
     private String title;
+    @Column(length = 1000)
     private String statement;
+    @Column(length = 1000)
     private String passage;
     private Integer duration;
     private Boolean isActive;
