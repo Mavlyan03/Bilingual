@@ -33,7 +33,7 @@ public class QuestionAnswer {
 
     private Float score;
 
-    private String textUserResponse;
+    private String textResponseUser;
 
     @OneToOne(cascade = {
             REFRESH,

@@ -26,11 +26,16 @@ public class Question {
     @Enumerated(EnumType.STRING)
     private QuestionType questionType;
     private String title;
+    @Column(length = 1000)
+    private String statement;
+    @Column(length = 1000)
     private String passage;
     private Integer duration;
     private Boolean isActive;
+    private Integer numberOfReplays;
     private String correctAnswer;
     private Integer minWords;
+    private Integer questionNumber;
 
     @OneToOne(cascade = {
             PERSIST,
@@ -50,4 +55,7 @@ public class Question {
             MERGE,
             DETACH})
     private Test test;
+
+    @OneToOne(cascade = ALL,mappedBy = "question")
+    private QuestionAnswer questionAnswer;
 }
