@@ -20,7 +20,7 @@ VALUES (1, 'audio', 'AUDIO'),
        (3, 'image', 'IMAGE'),
        (4, 'record', 'RECORD');
 
-INSERT INTO questions (id, correct_answer, duration, is_active, min_number_of_words, number_of_replays, option_type,
+INSERT INTO questions (id, correct_answer, duration, is_active, min_words, number_of_replays, option_type,
                        passage, question_number, question_type, statement, title, content_id, test_id)
 VALUES (1, null, 1, true, null, null, 'MULTIPLE_CHOICE', null, 1, 'SELECT_REAL_ENGLISH_WORDS', null, 'Select real english word', 3, 1),
        (2, null, 1, true, null, null, 'MULTIPLE_CHOICE', null, 2, 'LISTEN_AND_SELECT_WORD', null, 'Select real english word', 1, 1),
@@ -74,7 +74,7 @@ VALUES (1,1),
 insert into results (id, date_of_submission, final_score, status, client_id, test_id)
 VALUES (1, '2022-12-10 20:04:44.794364', 43, 'NOT_EVALUATED', 1, 1);
 
-insert into question_answers (id, number_of_words, score, text_response_user, content_id, question_id, result_id, seen, status, number_of_plays)
+insert into question_answers (id, number_of_words, score, text_response_user, content_id, question_id, result_id, seen, status, count_of_plays)
 values (1, null, 5, null, 3, 1, 1, false, 'NOT_EVALUATED', null),
        (2, null, 5, null, 1, 2, 1, false, 'NOT_EVALUATED', null),
        (3, null, 5, 'I heard beautifully nature', 1, 3, 1, false, 'NOT_EVALUATED', 2),
