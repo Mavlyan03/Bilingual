@@ -19,14 +19,14 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .components(new Components()
-                        .addSecuritySchemes(API_KEY, apiKeySecuritySchema())) // define the apiKey SecuritySchema
-                .info(new Info().title("News Portal"))
-                .security(Collections.singletonList(new SecurityRequirement().addList(API_KEY))); // then apply it. If you don't apply it will not be added to the header in cURL
+                        .addSecuritySchemes(API_KEY, apiKeySecuritySchema()))
+                .info(new Info().title("Bilingual"))
+                .security(Collections.singletonList(new SecurityRequirement().addList(API_KEY)));
     }
 
     public SecurityScheme apiKeySecuritySchema() {
         return new SecurityScheme()
-                .name("Authorization") // authorisation-token
+                .name("Authorization")
                 .description("Just put the token")
                 .in(SecurityScheme.In.HEADER)
                 .type(SecurityScheme.Type.HTTP)
