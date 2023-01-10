@@ -24,6 +24,7 @@ public class Client {
     private String lastName;
 
     @OneToOne(cascade = {
+            PERSIST,
             REFRESH,
             MERGE,
             DETACH})
