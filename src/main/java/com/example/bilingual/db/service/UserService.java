@@ -44,7 +44,10 @@ public class UserService {
                 user.getRole());
     }
 
-    private RegisterResponse register(RegisterRequest registerRequest) {
+    public RegisterResponse register(RegisterRequest registerRequest) {
+        if(userRepository.existsUserByEmail(registerRequest.getEmail())) {
+            throw new RuntimeException("User exist with this email %s");
+        }
         registerRequest.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         Client client = new Client(registerRequest);
         Client client1 = clientRepository.save(client);
