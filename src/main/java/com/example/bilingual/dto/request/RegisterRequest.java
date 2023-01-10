@@ -1,5 +1,6 @@
 package com.example.bilingual.dto.request;
 
+import com.example.bilingual.validation.PasswordValid;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,5 +14,6 @@ public class RegisterRequest {
     private String lastName;
     private String email;
     @NotBlank
+    @PasswordValid
     private String password;
 }
