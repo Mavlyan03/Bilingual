@@ -9,7 +9,7 @@ public class PasswordValidator implements ConstraintValidator<PasswordValid, Str
     public boolean isValid(String password,
                            ConstraintValidatorContext constraintValidatorContext) {
         if(password.length() > 8) {
-            return password.matches("^[a-zA-Z0-9]{8,16}$");
+            return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$");
         } else {
             return false;
         }
