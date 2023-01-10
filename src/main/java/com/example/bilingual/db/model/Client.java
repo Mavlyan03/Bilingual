@@ -1,5 +1,7 @@
 package com.example.bilingual.db.model;
 
+import com.example.bilingual.db.model.enums.Role;
+import com.example.bilingual.dto.request.RegisterRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,9 +22,21 @@ public class Client {
     private Long id;
     private String firstName;
     private String lastName;
+
     @OneToOne(cascade = {
+            PERSIST,
             REFRESH,
             MERGE,
             DETACH})
     private User user;
+
+    public Client(RegisterRequest register) {
+        this.firstName = register.getFirstName();
+        this.lastName = register.getLastName();;
+        User user1 = new User();
+        user1.setEmail(register.getEmail());
+        user1.setPassword(register.getPassword());
+        user1.setRole(Role.CLIENT);
+        this.user = user1;
+    }
 }
