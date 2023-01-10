@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
@@ -30,7 +32,7 @@ public class AuthApi {
     @PostMapping("/sign_up")
     @Operation(summary = "Sign Up",
             description = "User can sign up")
-    public RegisterResponse register(@RequestBody RegisterRequest register) {
+    public RegisterResponse register(@RequestBody @Valid RegisterRequest register) {
         return userService.register(register);
     }
 }
