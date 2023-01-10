@@ -8,6 +8,8 @@ import com.example.bilingual.dto.request.LoginRequest;
 import com.example.bilingual.dto.request.RegisterRequest;
 import com.example.bilingual.dto.response.LoginResponse;
 import com.example.bilingual.dto.response.RegisterResponse;
+import com.example.bilingual.exception.BadRequestException;
+import com.example.bilingual.exception.NotFoundException;
 import com.example.bilingual.security.jwt.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,8 +17,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class UserService {
                         loginRequest.getPassword()));
 
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(
-                () -> new NoSuchElementException("User not found"));
+                () -> new NotFoundException("User not found"));
 
         String token = jwtTokenUtil.generateToken(user.getEmail());
         return new LoginResponse(
@@ -46,7 +46,7 @@ public class UserService {
 
     public RegisterResponse register(RegisterRequest registerRequest) {
         if(userRepository.existsUserByEmail(registerRequest.getEmail())) {
-            throw new RuntimeException("User exist with this email %s");
+            throw new BadRequestException("User exist with this email %s");
         }
         registerRequest.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         Client client = new Client(registerRequest);

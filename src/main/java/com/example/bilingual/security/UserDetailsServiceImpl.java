@@ -1,6 +1,7 @@
 package com.example.bilingual.security;
 
 import com.example.bilingual.db.repository.UserRepository;
+import com.example.bilingual.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +18,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username).orElseThrow(
-                () -> new RuntimeException("user not found"));
+                () -> new NotFoundException("user not found"));
     }
 }
