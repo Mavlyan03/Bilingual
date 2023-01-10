@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @CrossOrigin(origins = "*",maxAge = 3600)
 @Tag(name = "Auth API", description = "User can sign in and sign up")
-@PreAuthorize("hasAuthority('CLIENT')")
 public class AuthApi {
 
     private final UserService userService;
