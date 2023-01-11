@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/test")
@@ -39,5 +41,12 @@ public class TestApi {
             description = "ADMIN can delete test by id")
     public SimpleResponse deleteTest(@PathVariable Long id) {
         return testService.deleteTest(id);
+    }
+
+    @GetMapping
+    @Operation(summary = "Get all tests",
+            description = "ADMIN can get all tests")
+    public List<TestResponse> getAllTests() {
+        return testService.getAllTests();
     }
 }

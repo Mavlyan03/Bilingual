@@ -9,6 +9,8 @@ import com.example.bilingual.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TestService {
@@ -36,5 +38,9 @@ public class TestService {
                 () -> new NotFoundException("Test not found"));
         testRepository.delete(test);
         return new SimpleResponse("Test deleted successfully");
+    }
+
+    public List<TestResponse> getAllTests() {
+        return testRepository.getAllTests();
     }
 }

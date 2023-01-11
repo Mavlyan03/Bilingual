@@ -1,7 +1,6 @@
 package com.example.bilingual.dto.response;
 
 import com.example.bilingual.db.model.Test;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
