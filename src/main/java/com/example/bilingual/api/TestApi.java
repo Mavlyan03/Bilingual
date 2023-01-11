@@ -2,6 +2,7 @@ package com.example.bilingual.api;
 
 import com.example.bilingual.db.service.TestService;
 import com.example.bilingual.dto.request.TestRequest;
+import com.example.bilingual.dto.response.SimpleResponse;
 import com.example.bilingual.dto.response.TestResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,5 +32,12 @@ public class TestApi {
             description = "ADMIN can update test by id")
     public TestResponse updateTest(@PathVariable Long id, @RequestBody TestRequest testRequest) {
         return testService.updateTest(id, testRequest);
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete test",
+            description = "ADMIN can delete test by id")
+    public SimpleResponse deleteTest(@PathVariable Long id) {
+        return testService.deleteTest(id);
     }
 }

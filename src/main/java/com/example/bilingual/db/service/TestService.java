@@ -3,6 +3,7 @@ package com.example.bilingual.db.service;
 import com.example.bilingual.db.model.Test;
 import com.example.bilingual.db.repository.TestRepository;
 import com.example.bilingual.dto.request.TestRequest;
+import com.example.bilingual.dto.response.SimpleResponse;
 import com.example.bilingual.dto.response.TestResponse;
 import com.example.bilingual.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,12 @@ public class TestService {
                 testRequest.getTitle(),
                 testRequest.getShortDescription());
         return new TestResponse(test);
+    }
+    
+    public SimpleResponse deleteTest(Long id) {
+        Test test = testRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Test not found"));
+        testRepository.delete(test);
+        return new SimpleResponse("Test deleted successfully");
     }
 }
