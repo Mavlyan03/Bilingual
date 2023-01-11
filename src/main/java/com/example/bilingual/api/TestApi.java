@@ -25,4 +25,11 @@ public class TestApi {
     public TestResponse saveTest(@RequestBody TestRequest testRequest) {
         return testService.saveTest(testRequest);
     }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Update test",
+            description = "ADMIN can update test by id")
+    public TestResponse updateTest(@PathVariable Long id, @RequestBody TestRequest testRequest) {
+        return testService.updateTest(id, testRequest);
+    }
 }
