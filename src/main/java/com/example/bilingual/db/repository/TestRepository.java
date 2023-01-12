@@ -14,9 +14,9 @@ public interface TestRepository extends JpaRepository<Test, Long> {
 
     @Modifying
     @Transactional
-    @Query("update Test t set t.title = :title, t.description = :description where t.id = :id")
+    @Query("update Test t set t.title = :name, t.description = :description where t.id = :id")
     void updateTest(@Param("id") Long id,
-                    @Param("title") String title,
+                    @Param("name") String title,
                     @Param("description") String description);
 
     @Query("select new com.example.bilingual.dto.response.TestResponse(t) from Test t")

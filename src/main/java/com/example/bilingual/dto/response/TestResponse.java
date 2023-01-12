@@ -12,10 +12,17 @@ public class TestResponse {
     private String shortDescription;
     private Boolean isActive;
 
+    public TestResponse(Long id, String title, String shortDescription, Boolean isActive) {
+        this.id = id;
+        this.title = title;
+        this.shortDescription = shortDescription;
+        this.isActive = isActive;
+    }
+
     public TestResponse(Test test) {
         this.id = test.getId();
         this.title = test.getTitle();
-        this.shortDescription = test.getDescription();
-        this.isActive = test.getIsActive();
+        this.title = test.getDescription();
+        this.isActive = true;
     }
 }

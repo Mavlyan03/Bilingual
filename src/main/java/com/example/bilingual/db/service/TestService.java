@@ -12,6 +12,7 @@ import com.example.bilingual.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -21,6 +22,7 @@ public class TestService {
     private final TestRepository testRepository;
     private final QuestionRepository questionRepository;
 
+    @Transactional
     public SimpleResponse enableDisable(Long id) {
         Test test = testRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Test not found"));
@@ -45,7 +47,7 @@ public class TestService {
                 test.getId(),
                 testRequest.getTitle(),
                 testRequest.getShortDescription());
-        return new TestResponse(test);
+        return new TestResponse(id, testRequest.getTitle(), testRequest.getShortDescription(), test.getIsActive());
     }
 
     public SimpleResponse deleteTest(Long id) {
