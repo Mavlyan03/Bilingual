@@ -41,6 +41,6 @@ public class Result {
     @OneToMany(cascade = {
             REFRESH,
             MERGE,
-            DETACH})
+            DETACH}, mappedBy = "result")
     private List<QuestionAnswer> questionAnswers;
 }

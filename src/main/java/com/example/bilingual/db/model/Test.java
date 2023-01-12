@@ -1,5 +1,6 @@
 package com.example.bilingual.db.model;
 
+import com.example.bilingual.dto.request.TestRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,14 @@ public class Test {
     private String title;
     private String description;
 
+    private Boolean isActive;
+
     @OneToMany(cascade = ALL, mappedBy = "test")
     private List<Question> questions;
+
+    public Test(TestRequest testRequest) {
+        this.title = testRequest.getTitle();
+        this.description = testRequest.getShortDescription();
+        this.isActive = true;
+    }
 }
