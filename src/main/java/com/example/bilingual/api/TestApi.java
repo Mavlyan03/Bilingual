@@ -3,6 +3,7 @@ package com.example.bilingual.api;
 import com.example.bilingual.db.service.TestService;
 import com.example.bilingual.dto.request.TestRequest;
 import com.example.bilingual.dto.response.SimpleResponse;
+import com.example.bilingual.dto.response.TestInnerPageResponse;
 import com.example.bilingual.dto.response.TestResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -55,5 +56,12 @@ public class TestApi {
             description = "ADMIN can change status of test")
     public SimpleResponse enableDisable(@PathVariable Long id) {
         return testService.enableDisable(id);
+    }
+
+    @GetMapping("/test/{id}")
+    @Operation(summary = "Test inner page",
+            description = "ADMIN can get test inner page")
+    public TestInnerPageResponse getTestById(@PathVariable Long id) {
+        return testService.getTestById(id);
     }
 }
