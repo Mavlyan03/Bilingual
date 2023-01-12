@@ -49,4 +49,11 @@ public class TestApi {
     public List<TestResponse> getAllTests() {
         return testService.getAllTests();
     }
+
+    @PutMapping("/enable-disable/{id}")
+    @Operation(summary = "Enable - Disable Test",
+            description = "ADMIN can change status of test")
+    public SimpleResponse enableDisable(@PathVariable Long id) {
+        return testService.enableDisable(id);
+    }
 }

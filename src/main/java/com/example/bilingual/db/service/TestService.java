@@ -17,6 +17,16 @@ public class TestService {
 
     private final TestRepository testRepository;
 
+    public SimpleResponse enableDisable(Long id) {
+        Test test = testRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Test not found"));
+        test.setIsActive(!test.getIsActive());
+        if(test.getIsActive()) {
+            return new SimpleResponse("Test is enable");
+        } else {
+            return new SimpleResponse("Test is disable");
+        }
+    }
     public TestResponse saveTest(TestRequest testRequest) {
         Test test = new Test(testRequest);
         testRepository.save(test);
