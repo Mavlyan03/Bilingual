@@ -22,7 +22,7 @@ public class TestResponse {
     public TestResponse(Test test) {
         this.id = test.getId();
         this.title = test.getTitle();
-        this.title = test.getDescription();
+        this.shortDescription = test.getDescription();
         this.isActive = true;
     }
 }
