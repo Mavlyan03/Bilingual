@@ -42,7 +42,7 @@ public class QuestionService {
             questionRepository.save(question);
             return new SimpleResponse("Question saved successfully");
         }
-        return null;
+        return new SimpleResponse("Question save successfully");
     }
 
 }
