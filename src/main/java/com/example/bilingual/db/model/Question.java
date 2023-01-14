@@ -22,7 +22,7 @@ import static javax.persistence.CascadeType.*;
 @NoArgsConstructor
 public class Question {
     @Id
-    @SequenceGenerator(name = "question_seq", sequenceName = "question_seq", allocationSize = 1, initialValue = 10)
+    @SequenceGenerator(name = "question_seq", sequenceName = "question_seq", allocationSize = 1, initialValue = 20)
     @GeneratedValue(generator = "question_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
     @Enumerated(EnumType.STRING)

@@ -18,7 +18,7 @@ import static javax.persistence.CascadeType.*;
 @NoArgsConstructor
 public class Option {
     @Id
-    @SequenceGenerator(name = "option_seq",sequenceName = "option_seq",allocationSize = 1, initialValue = 10)
+    @SequenceGenerator(name = "option_seq",sequenceName = "option_seq",allocationSize = 1, initialValue = 20)
     @GeneratedValue(generator = "option_seq",strategy = GenerationType.SEQUENCE)
     private Long id;
     private String title;
