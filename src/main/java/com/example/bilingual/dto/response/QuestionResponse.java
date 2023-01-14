@@ -1,4 +1,4 @@
-package com.example.bilingual.dto.request;
+package com.example.bilingual.dto.response;
 
 import com.example.bilingual.db.model.enums.QuestionType;
 import lombok.Getter;
@@ -8,16 +8,19 @@ import java.util.List;
 
 @Getter
 @Setter
-public class QuestionRequest {
-    private Long testId;
+public class QuestionResponse {
+    private Long id;
     private String title;
-    private Integer duration;
+    private String duration;
+    private String shortDescription;
     private QuestionType questionType;
-    private List<OptionRequest> options;
     private Integer numberOfReplays;
     private String correctAnswer;
     private Integer numberOfWords;
-    private String passage;
     private String statement;
-    private ContentRequest contentRequest;
+    private String passage;
+    private List<OptionResponse> optionResponses;
+    private String content;
+    private Boolean isTrue;
+    private String questionNumber;
 }
