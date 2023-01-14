@@ -1,5 +1,6 @@
 package com.example.bilingual.db.model;
 
+import com.example.bilingual.dto.request.OptionRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +18,7 @@ import static javax.persistence.CascadeType.*;
 @NoArgsConstructor
 public class Option {
     @Id
-    @SequenceGenerator(name = "option_seq",sequenceName = "option_seq",allocationSize = 1, initialValue = 10)
+    @SequenceGenerator(name = "option_seq",sequenceName = "option_seq",allocationSize = 1, initialValue = 20)
     @GeneratedValue(generator = "option_seq",strategy = GenerationType.SEQUENCE)
     private Long id;
     private String title;
@@ -36,4 +37,10 @@ public class Option {
             DETACH},
             mappedBy = "options")
     private List<QuestionAnswer> questionAnswer;
+
+    public Option(OptionRequest option) {
+        this.title = option.getTitle();
+        this.option = option.getOption();
+        this.isTrue = option.getIsTrue();
+    }
 }

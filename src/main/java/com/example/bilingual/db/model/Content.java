@@ -1,6 +1,7 @@
 package com.example.bilingual.db.model;
 
 import com.example.bilingual.db.model.enums.ContentFormat;
+import com.example.bilingual.dto.request.ContentRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,4 +23,9 @@ public class Content {
 
     @Enumerated(EnumType.STRING)
     private ContentFormat contentFormat;
+
+    public Content(ContentRequest contentRequest) {
+        this.content = contentRequest.getContent();
+        this.contentFormat = contentRequest.getContentFormat();
+    }
 }
