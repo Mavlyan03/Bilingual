@@ -30,9 +30,17 @@ public class QuestionService {
         }
         if(questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_REAL_ENGLISH_WORDS) &&
                 questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.TEXT) &&
-                questionRequest.getOptions().size() > 0) {
-            Question question = new Question(questionRequest);
-
+                questionRequest.getOptions() != null) {
+            Question question = new Question(questionRequest, 1);
+            questionRepository.save(question);
+            return new SimpleResponse("Question saved successfully!");
+        }
+        if(questionRequest.getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS) &&
+                questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.AUDIO) &&
+                questionRequest.getOptions() != null) {
+            Question question = new Question(questionRequest, 2);
+            questionRepository.save(question);
+            return new SimpleResponse("Question saved successfully");
         }
         return null;
     }

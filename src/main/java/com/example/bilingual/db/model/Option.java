@@ -1,5 +1,6 @@
 package com.example.bilingual.db.model;
 
+import com.example.bilingual.dto.request.OptionRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,4 +37,10 @@ public class Option {
             DETACH},
             mappedBy = "options")
     private List<QuestionAnswer> questionAnswer;
+
+    public Option(OptionRequest option) {
+        this.title = option.getTitle();
+        this.option = option.getOption();
+        this.isTrue = option.getIsTrue();
+    }
 }

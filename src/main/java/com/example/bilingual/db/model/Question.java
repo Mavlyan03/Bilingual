@@ -2,6 +2,7 @@ package com.example.bilingual.db.model;
 
 import com.example.bilingual.db.model.enums.OptionType;
 import com.example.bilingual.db.model.enums.QuestionType;
+import com.example.bilingual.dto.request.OptionRequest;
 import com.example.bilingual.dto.request.QuestionRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -60,7 +61,7 @@ public class Question {
     @OneToOne(cascade = ALL,mappedBy = "question")
     private QuestionAnswer questionAnswer;
 
-    public Question(QuestionRequest questionRequest) {
+    public Question(QuestionRequest questionRequest, Integer questionNumber) {
         this.duration = questionRequest.getDuration();
         this.questionType = questionRequest.getQuestionType();
         this.isActive = true;
@@ -70,6 +71,9 @@ public class Question {
         this.passage = questionRequest.getPassage();
         this.statement = questionRequest.getStatement();
         this.content = new Content(questionRequest.getContentRequest());
-
+        this.questionNumber = questionNumber;
+        for(OptionRequest option : questionRequest.getOptions()) {
+            this.options.add(new Option(option));
+        }
     }
 }
