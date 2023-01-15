@@ -7,7 +7,6 @@ import com.example.bilingual.db.model.enums.QuestionType;
 import com.example.bilingual.db.repository.QuestionRepository;
 import com.example.bilingual.db.repository.TestRepository;
 import com.example.bilingual.dto.request.QuestionRequest;
-import com.example.bilingual.dto.response.QuestionResponse;
 import com.example.bilingual.dto.response.SimpleResponse;
 import com.example.bilingual.exception.BadRequestException;
 import com.example.bilingual.exception.NotFoundException;
@@ -33,14 +32,23 @@ public class QuestionService {
                 questionRequest.getOptions() != null) {
             Question question = new Question(questionRequest, 1);
             questionRepository.save(question);
-            return new SimpleResponse("Question saved successfully!");
+            return new SimpleResponse("Question: SELECT THE REAL ENGLISH WORDS");
         }
         if(questionRequest.getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS) &&
                 questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.AUDIO) &&
                 questionRequest.getOptions() != null) {
             Question question = new Question(questionRequest, 2);
             questionRepository.save(question);
-            return new SimpleResponse("Question saved successfully");
+            return new SimpleResponse("Question: LISTEN AND SELECT ENGLISH WORDS");
+        }
+        if(questionRequest.getQuestionType().equals(QuestionType.RESPOND_IN_AT_LEAST_N_WORDS) &&
+                questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.TEXT) &&
+                questionRequest.getStatement() != null &&
+                questionRequest.getNumberOfWords() > 0 &&
+                questionRequest.getStatement() != null) {
+            Question question = new Question(questionRequest, 6);
+            questionRepository.save(question);
+            return new SimpleResponse("Question: RESPOND IN AT LEAST N WORDS");
         }
         return new SimpleResponse("Question save successfully");
     }
