@@ -82,18 +82,20 @@ public class QuestionService {
                 if (questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_REAL_ENGLISH_WORDS)) {
                     Question question = questionRepository.save(new Question(questionRequest, 1));
                     question.setTest(test);
+                    test.getQuestions().add(question);
                     question.setOptionType(OptionType.MULTIPLE);
                 } else if (questionRequest.getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS)) {
                     Question question = questionRepository.save(new Question(questionRequest, 2));
                     question.setTest(test);
+                    test.getQuestions().add(question);
                     question.setOptionType(OptionType.MULTIPLE);
                 }
-                return new SimpleResponse("Question saves successfully!");
+                return new SimpleResponse("Question saved successfully!");
             } else {
                 throw new BadRequestException("You should add more correct answers");
             }
         }
-        return new SimpleResponse("Question save successfully");
+        return new SimpleResponse("Question saved successfully");
     }
 
 }

@@ -4,12 +4,14 @@ import com.example.bilingual.db.model.enums.QuestionType;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Getter
 @Setter
 public class QuestionRequest {
     private Long testId;
+    @NotBlank
     private String title;
     private Integer duration;
     private QuestionType questionType;
