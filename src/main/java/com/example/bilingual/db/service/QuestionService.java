@@ -1,11 +1,13 @@
 package com.example.bilingual.db.service;
 
+import com.example.bilingual.db.model.Option;
 import com.example.bilingual.db.model.Question;
 import com.example.bilingual.db.model.Test;
 import com.example.bilingual.db.model.enums.ContentFormat;
 import com.example.bilingual.db.model.enums.QuestionType;
 import com.example.bilingual.db.repository.QuestionRepository;
 import com.example.bilingual.db.repository.TestRepository;
+import com.example.bilingual.dto.request.OptionRequest;
 import com.example.bilingual.dto.request.QuestionRequest;
 import com.example.bilingual.dto.response.QuestionResponse;
 import com.example.bilingual.dto.response.SimpleResponse;
@@ -49,6 +51,31 @@ public class QuestionService {
                 questionRequest.getQuestionType().equals(QuestionType.RESPOND_IN_AT_LEAST_50_WORDS) &&
                         questionRequest.getContentRequest().getContentFormat() != ContentFormat.TEXT) {
             throw new BadRequestException("Content format should be <TEXT>!");
+        }
+        if(questionRequest.getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS) &&
+                questionRequest.getContentRequest().getContentFormat() != ContentFormat.AUDIO ||
+                questionRequest.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR) &&
+                        questionRequest.getContentRequest().getContentFormat() != ContentFormat.AUDIO) {
+            throw new BadRequestException("Content format should be <AUDIO>!");
+        } else if(questionRequest.getQuestionType().equals(QuestionType.RECORD_SAYING_STATEMENT) &&
+                questionRequest.getContentRequest().getContentFormat() != ContentFormat.RECORD) {
+            throw new BadRequestException("Content format should be <RECORD>!");
+        } else if(questionRequest.getQuestionType().equals(QuestionType.DESCRIBE_IMAGE) &&
+                questionRequest.getContentRequest().getContentFormat() != ContentFormat.IMAGE) {
+            throw new BadRequestException("Content format should be <IMAGE>!");
+        }
+        if(questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_REAL_ENGLISH_WORDS) &&
+                questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.TEXT) &&
+                questionRequest.getOptions() != null & !(questionRequest.getOptions().isEmpty())) {
+            int counter = 0;
+            for(OptionRequest option : questionRequest.getOptions()) {
+                if(option.getIsTrue().equals(true)) {
+                    counter++;
+                }
+            }
+            if(counter <= 1) {
+                throw new BadRequestException("The number of correct answer must be greater 1 or 0");
+            }
         }
 //        if(questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_REAL_ENGLISH_WORDS) &&
 //                questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.TEXT) &&
