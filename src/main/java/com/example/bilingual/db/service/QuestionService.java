@@ -49,7 +49,7 @@ public class QuestionService {
                         questionRequest.getContentRequest().getContentFormat() != ContentFormat.TEXT ||
                 questionRequest.getQuestionType().equals(QuestionType.HIGHLIGHT_THE_ANSWER) &&
                         questionRequest.getContentRequest().getContentFormat() != ContentFormat.TEXT ||
-                questionRequest.getQuestionType().equals(QuestionType.RESPOND_IN_AT_LEAST_50_WORDS) &&
+                questionRequest.getQuestionType().equals(QuestionType.RESPOND_IN_AT_LEAST_N_WORDS) &&
                         questionRequest.getContentRequest().getContentFormat() != ContentFormat.TEXT) {
             throw new BadRequestException("Content format should be <TEXT>!");
         }
