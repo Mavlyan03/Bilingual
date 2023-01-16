@@ -49,7 +49,7 @@ public class QuestionService {
                         questionRequest.getContentRequest().getContentFormat() != ContentFormat.TEXT ||
                 questionRequest.getQuestionType().equals(QuestionType.HIGHLIGHT_THE_ANSWER) &&
                         questionRequest.getContentRequest().getContentFormat() != ContentFormat.TEXT ||
-                questionRequest.getQuestionType().equals(QuestionType.RESPOND_IN_AT_LEAST_50_WORDS) &&
+                questionRequest.getQuestionType().equals(QuestionType.RESPOND_IN_AT_LEAST_N_WORDS) &&
                         questionRequest.getContentRequest().getContentFormat() != ContentFormat.TEXT) {
             throw new BadRequestException("Content format should be <TEXT>!");
         }
@@ -93,6 +93,32 @@ public class QuestionService {
                 return new SimpleResponse("Question saved successfully!");
             } else {
                 throw new BadRequestException("You should add more correct answers");
+            }
+        } else if(questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA) ||
+                questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE) &&
+                        questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.TEXT) &&
+                        questionRequest.getOptions() != null & !questionRequest.getOptions().isEmpty()) {
+            int counter = 0;
+            for(OptionRequest option : questionRequest.getOptions()) {
+                if(option.getIsTrue().equals(true)) {
+                    counter++;
+                }
+            }
+            if(counter == 1) {
+                if(questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA)) {
+                    Question question = questionRepository.save(new Question(questionRequest, 4));
+                    question.setTest(test);
+                    test.getQuestions().add(question);
+                    question.setOptionType(OptionType.SINGLETON);
+                } else if(questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE)) {
+                    Question question = questionRepository.save(new Question(questionRequest, 4));
+                    question.setTest(test);
+                    test.getQuestions().add(question);
+                    question.setOptionType(OptionType.SINGLETON);
+                }
+                return new SimpleResponse("Question save successfully");
+            } else {
+                throw new BadRequestException("You should add only one correct answer");
             }
         }
         return new SimpleResponse("Question saved successfully");
