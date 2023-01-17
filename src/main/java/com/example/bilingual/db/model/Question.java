@@ -62,6 +62,7 @@ public class Question {
     private QuestionAnswer questionAnswer;
 
     public Question(QuestionRequest questionRequest, Integer questionNumber) {
+        this.title = questionRequest.getTitle();
         this.duration = questionRequest.getDuration();
         this.questionType = questionRequest.getQuestionType();
         this.isActive = true;
