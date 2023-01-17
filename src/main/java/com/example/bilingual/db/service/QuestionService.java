@@ -122,6 +122,15 @@ public class QuestionService {
                     } else {
                         throw new BadRequestException("You should add only one correct answer");
                     }
+                } else if(questionRequest.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR) &&
+                        questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.AUDIO)
+                        && questionRequest.getNumberOfReplays() != null &
+                        !(questionRequest.getCorrectAnswer().isEmpty()) |
+                        questionRequest.getCorrectAnswer() != null) {
+                    Question question = new Question(questionRequest, 3);
+                    question.setTest(test);
+                    test.getQuestions().add(question);
+                    return new SimpleResponse("Question saved successfully");
                 }
             }
         }
