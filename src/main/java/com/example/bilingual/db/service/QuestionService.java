@@ -64,7 +64,7 @@ public class QuestionService {
                 throw new BadRequestException("Content format should be <IMAGE>!");
             } else {
                 if (questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_REAL_ENGLISH_WORDS) &&
-                        questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.TEXT)  &&
+                        questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.TEXT) &&
                         questionRequest.getOptions() != null & !(questionRequest.getOptions().isEmpty()) ||
                         questionRequest.getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS) &&
                                 questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.AUDIO) &&
@@ -94,23 +94,23 @@ public class QuestionService {
                     } else {
                         throw new BadRequestException("You should add more correct answers");
                     }
-                } else if(questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA) ||
+                } else if (questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA) ||
                         questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE) &&
                                 questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.TEXT) &&
                                 questionRequest.getOptions() != null | !questionRequest.getOptions().isEmpty()) {
                     int counter = 0;
-                    for(OptionRequest option : questionRequest.getOptions()) {
-                        if(option.getIsTrue().equals(true)) {
+                    for (OptionRequest option : questionRequest.getOptions()) {
+                        if (option.getIsTrue().equals(true)) {
                             counter++;
                         }
                     }
-                    if(counter == 1) {
-                        if(questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA)) {
+                    if (counter == 1) {
+                        if (questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA)) {
                             Question question = questionRepository.save(new Question(questionRequest, 8));
                             question.setTest(test);
                             test.getQuestions().add(question);
                             question.setOptionType(OptionType.SINGLETON);
-                        } else if(questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE)) {
+                        } else if (questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE)) {
                             Question question = questionRepository.save(new Question(questionRequest, 9));
                             question.setTest(test);
                             test.getQuestions().add(question);
@@ -120,18 +120,19 @@ public class QuestionService {
                     } else {
                         throw new BadRequestException("You should add only one correct answer");
                     }
-                } else if(questionRequest.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR) &&
-                        questionRequest.getContentRequest().getContentFormat() != ContentFormat.AUDIO) {
-                    throw new BadRequestException("Content format should be <AUDIO>");
-
-                }else if(questionRequest.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR) &&
-                        questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.AUDIO)
-                        && questionRequest.getNumberOfReplays() <= 0 | questionRequest.getNumberOfReplays() == null) {
-                   throw new BadRequestException("You should fill in the field <Number of Replays>");
-                } else if(questionRequest.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR) &&
-                        questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.AUDIO)
-                        && questionRequest.getCorrectAnswer().isEmpty()) {
-                    throw new BadRequestException("You should fill the field <Correct Answer>");
+                } else if (questionRequest.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR)) {
+                    if (questionRequest.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR) &&
+                            questionRequest.getNumberOfReplays() <= 0 | questionRequest.getNumberOfReplays() == null) {
+                        throw new BadRequestException("You should fill in the field <Number of Replays>");
+                    } else if (questionRequest.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR) &&
+                            questionRequest.getCorrectAnswer().isEmpty()) {
+                        throw new BadRequestException("You should fill the field <Correct Answer>");
+                    } else {
+                        Question question = new Question(questionRequest, 3);
+                        question.setTest(test);
+                        test.getQuestions().add(question);
+                        questionRepository.save(question);
+                    }
                 }
             }
         }
