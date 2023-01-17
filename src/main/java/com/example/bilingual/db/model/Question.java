@@ -49,7 +49,7 @@ public class Question {
     @Enumerated(EnumType.STRING)
     private OptionType optionType;
 
-    @OneToMany(cascade = ALL)
+    @OneToMany(cascade = ALL, mappedBy = "question")
     private List<Option> options = new ArrayList<>();
 
     @ManyToOne(cascade = {

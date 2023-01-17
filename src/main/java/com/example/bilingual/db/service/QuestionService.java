@@ -80,15 +80,17 @@ public class QuestionService {
                     }
                     if (counter > 1) {
                         if (questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_REAL_ENGLISH_WORDS)) {
-                            Question question = questionRepository.save(new Question(questionRequest, 1));
+                            Question question = new Question(questionRequest, 1);
                             question.setTest(test);
                             test.getQuestions().add(question);
                             question.setOptionType(OptionType.MULTIPLE);
+                            questionRepository.save(question);
                         } else if (questionRequest.getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS)) {
-                            Question question = questionRepository.save(new Question(questionRequest, 2));
+                            Question question = new Question(questionRequest, 2);
                             question.setTest(test);
                             test.getQuestions().add(question);
                             question.setOptionType(OptionType.MULTIPLE);
+                            questionRepository.save(question);
                         }
                         return new SimpleResponse("Question saved successfully!");
                     } else {
