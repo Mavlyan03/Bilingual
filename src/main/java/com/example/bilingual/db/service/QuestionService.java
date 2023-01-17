@@ -120,6 +120,18 @@ public class QuestionService {
                     } else {
                         throw new BadRequestException("You should add only one correct answer");
                     }
+                } else if(questionRequest.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR) &&
+                        questionRequest.getContentRequest().getContentFormat() != ContentFormat.AUDIO) {
+                    throw new BadRequestException("Content format should be <AUDIO>");
+
+                }else if(questionRequest.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR) &&
+                        questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.AUDIO)
+                        && questionRequest.getNumberOfReplays() <= 0 | questionRequest.getNumberOfReplays() == null) {
+                   throw new BadRequestException("You should fill in the field <Number of Replays>");
+                } else if(questionRequest.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR) &&
+                        questionRequest.getContentRequest().getContentFormat().equals(ContentFormat.AUDIO)
+                        && questionRequest.getCorrectAnswer().isEmpty()) {
+                    throw new BadRequestException("You should fill the field <Correct Answer>");
                 }
             }
         }
