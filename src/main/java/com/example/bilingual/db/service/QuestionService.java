@@ -108,15 +108,17 @@ public class QuestionService {
                     }
                     if (counter == 1) {
                         if (questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA)) {
-                            Question question = questionRepository.save(new Question(questionRequest, 8));
+                            Question question = new Question(questionRequest, 8);
                             question.setTest(test);
                             test.getQuestions().add(question);
                             question.setOptionType(OptionType.SINGLETON);
+                            questionRepository.save(question);
                         } else if (questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE)) {
-                            Question question = questionRepository.save(new Question(questionRequest, 9));
+                            Question question = new Question(questionRequest, 9);
                             question.setTest(test);
                             test.getQuestions().add(question);
                             question.setOptionType(OptionType.SINGLETON);
+                            questionRepository.save(question);
                         }
                         return new SimpleResponse("Question save successfully");
                     } else {
@@ -125,12 +127,21 @@ public class QuestionService {
                 } else if (questionRequest.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR)) {
                     if (questionRequest.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR) &&
                             questionRequest.getNumberOfReplays() <= 0 | questionRequest.getNumberOfReplays() == null) {
-                        throw new BadRequestException("You should fill in the field <Number of Replays>");
+                        throw new BadRequestException("Number of Replays shouldn't be empty or zero");
                     } else if (questionRequest.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR) &&
                             questionRequest.getCorrectAnswer().isEmpty()) {
-                        throw new BadRequestException("You should fill the field <Correct Answer>");
+                        throw new BadRequestException("Correct answer shouldn't be empty");
                     } else {
                         Question question = new Question(questionRequest, 3);
+                        question.setTest(test);
+                        test.getQuestions().add(question);
+                        questionRepository.save(question);
+                    }
+                } else if(questionRequest.getQuestionType().equals(QuestionType.DESCRIBE_IMAGE)) {
+                    if(questionRequest.getCorrectAnswer().isEmpty() | questionRequest.getCorrectAnswer() == null) {
+                        throw new BadRequestException("Correct answer shouldn't be empty");
+                    } else {
+                        Question question = new Question(questionRequest, 4);
                         question.setTest(test);
                         test.getQuestions().add(question);
                         questionRepository.save(question);
