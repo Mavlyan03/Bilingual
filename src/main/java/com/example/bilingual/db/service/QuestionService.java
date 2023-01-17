@@ -146,6 +146,39 @@ public class QuestionService {
                         test.getQuestions().add(question);
                         questionRepository.save(question);
                     }
+                } else if(questionRequest.getQuestionType().equals(QuestionType.RECORD_SAYING_STATEMENT)) {
+                    if(questionRequest.getStatement().isEmpty() || questionRequest.getStatement() == null) {
+                        throw new BadRequestException("Statement shouldn't be empty");
+                    } else {
+                        Question question = new Question(questionRequest, 5);
+                        question.setTest(test);
+                        test.getQuestions().add(question);
+                        questionRepository.save(question);
+                    }
+                } else if(questionRequest.getQuestionType().equals(QuestionType.RESPOND_IN_AT_LEAST_N_WORDS)) {
+                    if(questionRequest.getStatement().isEmpty() || questionRequest.getStatement() == null) {
+                        throw new BadRequestException("Question statement shouldn't be empty");
+                    } else if(questionRequest.getNumberOfWords() <=0) {
+                        throw new BadRequestException("Number of Words shouldn't be empty or zero");
+                    } else {
+                        Question question = new Question(questionRequest, 6);
+                        question.setTest(test);
+                        test.getQuestions().add(question);
+                        questionRepository.save(question);
+                    }
+                } else if(questionRequest.getQuestionType().equals(QuestionType.HIGHLIGHT_THE_ANSWER)) {
+                    if(questionRequest.getPassage().isEmpty() || questionRequest.getPassage() == null) {
+                        throw new BadRequestException("Passage shouldn't be empty");
+                    } else if(questionRequest.getCorrectAnswer().isEmpty() || questionRequest.getCorrectAnswer() == null) {
+                        throw new BadRequestException("Highlight correct answer shouldn't be empty");
+                    } else if(questionRequest.getStatement().isEmpty() || questionRequest.getContentRequest() == null) {
+                         throw new BadRequestException("Question to the Passage shouldn't be empty");
+                    }else {
+                        Question question = new Question(questionRequest, 7);
+                        question.setTest(test);
+                        test.getQuestions().add(question);
+                        questionRepository.save(question);
+                    }
                 }
             }
         }
