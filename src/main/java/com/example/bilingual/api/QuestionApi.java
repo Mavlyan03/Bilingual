@@ -25,4 +25,11 @@ public class QuestionApi {
     public SimpleResponse saveQuestion(@RequestBody QuestionRequest questionRequest) {
         return questionService.saveQuestion(questionRequest);
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete question",
+            description = "ADMIN can delete question by id")
+    public SimpleResponse deleteQuestion(@PathVariable Long id) {
+        return questionService.deleteQuestion(id);
+    }
 }

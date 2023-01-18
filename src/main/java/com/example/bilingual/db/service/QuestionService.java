@@ -205,4 +205,13 @@ public class QuestionService {
         return new SimpleResponse("Question saved successfully");
     }
 
+
+    public SimpleResponse deleteQuestion(Long id) {
+        Question question = questionRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(
+                        String.format("Question with id %s not found", id)));
+        question.setTest(null);
+        questionRepository.delete(question);
+        return new SimpleResponse("Question deleted successfully");
+    }
 }
