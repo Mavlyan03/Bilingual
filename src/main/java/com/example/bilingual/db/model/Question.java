@@ -73,8 +73,5 @@ public class Question {
         this.statement = questionRequest.getStatement();
         this.content = new Content(questionRequest.getContentRequest());
         this.questionNumber = questionNumber;
-        for(OptionRequest option : questionRequest.getOptions()) {
-            this.options.add(new Option(option));
-        }
     }
 }
