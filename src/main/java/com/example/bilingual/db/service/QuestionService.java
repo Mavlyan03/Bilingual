@@ -80,16 +80,26 @@ public class QuestionService {
                     }
                     if (counter > 1) {
                         if (questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_REAL_ENGLISH_WORDS)) {
-                            Question question = new Question(questionRequest, questionRequest.getOptions(), 1);
+                            Question question = new Question(questionRequest, 1);
                             question.setTest(test);
                             test.getQuestions().add(question);
                             question.setOptionType(OptionType.MULTIPLE);
+                            for(OptionRequest options : questionRequest.getOptions()) {
+                                Option option = new Option(options);
+                                question.getOptions().add(option);
+                                option.setQuestion(question);
+                            }
                             questionRepository.save(question);
                         } else if (questionRequest.getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS)) {
-                            Question question = new Question(questionRequest, questionRequest.getOptions(),2);
+                            Question question = new Question(questionRequest,2);
                             question.setTest(test);
                             test.getQuestions().add(question);
                             question.setOptionType(OptionType.MULTIPLE);
+                            for(OptionRequest options : questionRequest.getOptions()) {
+                                Option option = new Option(options);
+                                question.getOptions().add(option);
+                                option.setQuestion(question);
+                            }
                             questionRepository.save(question);
                         }
                         return new SimpleResponse("Question saved successfully!");
@@ -108,16 +118,26 @@ public class QuestionService {
                     }
                     if (counter == 1) {
                         if (questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA)) {
-                            Question question = new Question(questionRequest, questionRequest.getOptions(), 8);
+                            Question question = new Question(questionRequest,  8);
                             question.setTest(test);
                             test.getQuestions().add(question);
                             question.setOptionType(OptionType.SINGLETON);
+                            for(OptionRequest options : questionRequest.getOptions()) {
+                                Option option = new Option(options);
+                                question.getOptions().add(option);
+                                option.setQuestion(question);
+                            }
                             questionRepository.save(question);
                         } else if (questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE)) {
-                            Question question = new Question(questionRequest, questionRequest.getOptions(), 9);
+                            Question question = new Question(questionRequest, 9);
                             question.setTest(test);
                             test.getQuestions().add(question);
                             question.setOptionType(OptionType.SINGLETON);
+                            for(OptionRequest options : questionRequest.getOptions()) {
+                                Option option = new Option(options);
+                                question.getOptions().add(option);
+                                option.setQuestion(question);
+                            }
                             questionRepository.save(question);
                         }
                         return new SimpleResponse("Question save successfully");
