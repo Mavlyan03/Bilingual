@@ -73,8 +73,15 @@ public class Question {
         this.statement = questionRequest.getStatement();
         this.content = new Content(questionRequest.getContentRequest());
         this.questionNumber = questionNumber;
-        for(OptionRequest option : questionRequest.getOptions()) {
-            this.options.add(new Option(option));
+    }
+
+    public Question(QuestionRequest questionRequest, List<OptionRequest> options, Integer questionNumber) {
+        this.title = questionRequest.getTitle();
+        this.duration = questionRequest.getDuration();
+        this.questionType = questionRequest.getQuestionType();
+        this.isActive = true;
+        for(OptionRequest optionRequest : options) {
+            this.options.add(new Option(optionRequest));
         }
     }
 }
