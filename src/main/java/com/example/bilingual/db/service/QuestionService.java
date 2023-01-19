@@ -6,10 +6,12 @@ import com.example.bilingual.db.model.Test;
 import com.example.bilingual.db.model.enums.ContentFormat;
 import com.example.bilingual.db.model.enums.OptionType;
 import com.example.bilingual.db.model.enums.QuestionType;
+import com.example.bilingual.db.repository.OptionRepository;
 import com.example.bilingual.db.repository.QuestionRepository;
 import com.example.bilingual.db.repository.TestRepository;
 import com.example.bilingual.dto.request.OptionRequest;
 import com.example.bilingual.dto.request.QuestionRequest;
+import com.example.bilingual.dto.response.OptionResponse;
 import com.example.bilingual.dto.response.QuestionResponse;
 import com.example.bilingual.dto.response.SimpleResponse;
 import com.example.bilingual.exception.BadRequestException;
@@ -17,11 +19,15 @@ import com.example.bilingual.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final OptionRepository optionRepository;
     private final TestRepository testRepository;
 
     public SimpleResponse saveQuestion(QuestionRequest questionRequest) {
@@ -84,18 +90,18 @@ public class QuestionService {
                             question.setTest(test);
                             test.getQuestions().add(question);
                             question.setOptionType(OptionType.MULTIPLE);
-                            for(OptionRequest options : questionRequest.getOptions()) {
+                            for (OptionRequest options : questionRequest.getOptions()) {
                                 Option option = new Option(options);
                                 question.getOptions().add(option);
                                 option.setQuestion(question);
                             }
                             questionRepository.save(question);
                         } else if (questionRequest.getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS)) {
-                            Question question = new Question(questionRequest,2);
+                            Question question = new Question(questionRequest, 2);
                             question.setTest(test);
                             test.getQuestions().add(question);
                             question.setOptionType(OptionType.MULTIPLE);
-                            for(OptionRequest options : questionRequest.getOptions()) {
+                            for (OptionRequest options : questionRequest.getOptions()) {
                                 Option option = new Option(options);
                                 question.getOptions().add(option);
                                 option.setQuestion(question);
@@ -118,11 +124,11 @@ public class QuestionService {
                     }
                     if (counter == 1) {
                         if (questionRequest.getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA)) {
-                            Question question = new Question(questionRequest,  8);
+                            Question question = new Question(questionRequest, 8);
                             question.setTest(test);
                             test.getQuestions().add(question);
                             question.setOptionType(OptionType.SINGLETON);
-                            for(OptionRequest options : questionRequest.getOptions()) {
+                            for (OptionRequest options : questionRequest.getOptions()) {
                                 Option option = new Option(options);
                                 question.getOptions().add(option);
                                 option.setQuestion(question);
@@ -133,7 +139,7 @@ public class QuestionService {
                             question.setTest(test);
                             test.getQuestions().add(question);
                             question.setOptionType(OptionType.SINGLETON);
-                            for(OptionRequest options : questionRequest.getOptions()) {
+                            for (OptionRequest options : questionRequest.getOptions()) {
                                 Option option = new Option(options);
                                 question.getOptions().add(option);
                                 option.setQuestion(question);
@@ -157,8 +163,8 @@ public class QuestionService {
                         test.getQuestions().add(question);
                         questionRepository.save(question);
                     }
-                } else if(questionRequest.getQuestionType().equals(QuestionType.DESCRIBE_IMAGE)) {
-                    if(questionRequest.getCorrectAnswer().isEmpty() | questionRequest.getCorrectAnswer() == null) {
+                } else if (questionRequest.getQuestionType().equals(QuestionType.DESCRIBE_IMAGE)) {
+                    if (questionRequest.getCorrectAnswer().isEmpty() | questionRequest.getCorrectAnswer() == null) {
                         throw new BadRequestException("Correct answer shouldn't be empty");
                     } else {
                         Question question = new Question(questionRequest, 4);
@@ -166,8 +172,8 @@ public class QuestionService {
                         test.getQuestions().add(question);
                         questionRepository.save(question);
                     }
-                } else if(questionRequest.getQuestionType().equals(QuestionType.RECORD_SAYING_STATEMENT)) {
-                    if(questionRequest.getStatement().isEmpty() || questionRequest.getStatement() == null) {
+                } else if (questionRequest.getQuestionType().equals(QuestionType.RECORD_SAYING_STATEMENT)) {
+                    if (questionRequest.getStatement().isEmpty() || questionRequest.getStatement() == null) {
                         throw new BadRequestException("Statement shouldn't be empty");
                     } else {
                         Question question = new Question(questionRequest, 5);
@@ -175,10 +181,10 @@ public class QuestionService {
                         test.getQuestions().add(question);
                         questionRepository.save(question);
                     }
-                } else if(questionRequest.getQuestionType().equals(QuestionType.RESPOND_IN_AT_LEAST_N_WORDS)) {
-                    if(questionRequest.getStatement().isEmpty() | questionRequest.getStatement() == null) {
+                } else if (questionRequest.getQuestionType().equals(QuestionType.RESPOND_IN_AT_LEAST_N_WORDS)) {
+                    if (questionRequest.getStatement().isEmpty() | questionRequest.getStatement() == null) {
                         throw new BadRequestException("Question statement shouldn't be empty");
-                    } else if(questionRequest.getNumberOfWords() <=0) {
+                    } else if (questionRequest.getNumberOfWords() <= 0) {
                         throw new BadRequestException("Number of Words shouldn't be empty or zero");
                     } else {
                         Question question = new Question(questionRequest, 6);
@@ -186,14 +192,14 @@ public class QuestionService {
                         test.getQuestions().add(question);
                         questionRepository.save(question);
                     }
-                } else if(questionRequest.getQuestionType().equals(QuestionType.HIGHLIGHT_THE_ANSWER)) {
-                    if(questionRequest.getPassage().isEmpty() || questionRequest.getPassage() == null) {
+                } else if (questionRequest.getQuestionType().equals(QuestionType.HIGHLIGHT_THE_ANSWER)) {
+                    if (questionRequest.getPassage().isEmpty() || questionRequest.getPassage() == null) {
                         throw new BadRequestException("Passage shouldn't be empty");
-                    } else if(questionRequest.getCorrectAnswer().isEmpty() || questionRequest.getCorrectAnswer() == null) {
+                    } else if (questionRequest.getCorrectAnswer().isEmpty() || questionRequest.getCorrectAnswer() == null) {
                         throw new BadRequestException("Highlight correct answer shouldn't be empty");
-                    } else if(questionRequest.getStatement().isEmpty() || questionRequest.getContentRequest() == null) {
-                         throw new BadRequestException("Question to the Passage shouldn't be empty");
-                    }else {
+                    } else if (questionRequest.getStatement().isEmpty() || questionRequest.getContentRequest() == null) {
+                        throw new BadRequestException("Question to the Passage shouldn't be empty");
+                    } else {
                         Question question = new Question(questionRequest, 7);
                         question.setTest(test);
                         test.getQuestions().add(question);
@@ -205,7 +211,6 @@ public class QuestionService {
         return new SimpleResponse("Question saved successfully");
     }
 
-
     public SimpleResponse deleteQuestion(Long id) {
         Question question = questionRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(
@@ -213,5 +218,28 @@ public class QuestionService {
         question.setTest(null);
         questionRepository.delete(question);
         return new SimpleResponse("Question deleted successfully");
+    }
+
+    public QuestionResponse getById(Long id) {
+        Question question = questionRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(
+                        String.format("Question with id %s not found", id)));
+        List<OptionResponse> options = optionRepository.getOptionsByQuestionId(question.getId());
+        QuestionResponse questionResponse = new QuestionResponse(question);
+        questionResponse.setOptionResponses(options);
+        return questionResponse;
+    }
+
+    @Transactional
+    public SimpleResponse enableDisable(Long id) {
+        Question question = questionRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(
+                        String.format("Question with id %s not found", id)));
+        question.setIsActive(!question.getIsActive());
+        if(question.getIsActive()) {
+            return new SimpleResponse("Question is enable");
+        } else {
+            return new SimpleResponse("Question is disable");
+        }
     }
 }

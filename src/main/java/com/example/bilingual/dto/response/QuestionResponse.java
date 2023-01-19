@@ -1,6 +1,8 @@
 package com.example.bilingual.dto.response;
 
+import com.example.bilingual.db.model.Question;
 import com.example.bilingual.db.model.enums.QuestionType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,4 +25,18 @@ public class QuestionResponse {
     private String content;
     private Boolean isTrue;
     private String questionNumber;
+
+    public QuestionResponse(Question question) {
+        this.id = question.getId();
+        this.title = question.getTitle();
+        this.shortDescription = question.getTest().getDescription();
+        this.questionType = question.getQuestionType();
+        this.numberOfReplays = question.getNumberOfReplays();
+        this.correctAnswer = question.getCorrectAnswer();
+        this.numberOfWords = question.getMinWords();
+        this.statement = question.getStatement();
+        this.passage = question.getPassage();
+        this.content = question.getContent().getContent();
+        this.isTrue = question.getIsActive();
+    }
 }
