@@ -228,4 +228,16 @@ public class QuestionService {
         questionResponse.setOptionResponses(options);
         return questionResponse;
     }
+
+    public SimpleResponse enableDisable(Long id) {
+        Question question = questionRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(
+                        String.format("Question with id %s not found", id)));
+        question.setIsActive(!question.getIsActive());
+        if(question.getIsActive()) {
+            return new SimpleResponse("Question is enable");
+        } else {
+            return new SimpleResponse("Question is disable");
+        }
+    }
 }

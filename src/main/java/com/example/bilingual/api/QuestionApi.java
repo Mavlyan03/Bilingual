@@ -40,4 +40,11 @@ public class QuestionApi {
     public QuestionResponse getQuestionById(@PathVariable Long id) {
         return questionService.getById(id);
     }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Enable - Disable",
+            description = "ADMIN can change status of question")
+    public SimpleResponse enableDisable(@PathVariable Long id) {
+        return questionService.enableDisable(id);
+    }
 }
