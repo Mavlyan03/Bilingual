@@ -19,6 +19,7 @@ import com.example.bilingual.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -229,6 +230,7 @@ public class QuestionService {
         return questionResponse;
     }
 
+    @Transactional
     public SimpleResponse enableDisable(Long id) {
         Question question = questionRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(
