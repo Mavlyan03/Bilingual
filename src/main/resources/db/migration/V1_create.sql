@@ -31,7 +31,7 @@ create table clients
         primary key,
     first_name varchar(255),
     last_name  varchar(255),
-    user_id    bigint
+    user_id    bigserial
         constraint fktiuqdledq2lybrds2k3rfqrv4
             references users
 );
