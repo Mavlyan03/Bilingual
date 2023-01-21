@@ -252,8 +252,9 @@ public class QuestionService {
                         String.format("Question with id %s not found", question.getId())));
         List<OptionResponse> options = optionRepository.getOptionsByQuestionId(question1.getId());
 
-        if(!question.getOptionRequests().isEmpty()) {
-            for (OptionRequest o : question.getOptionRequests()) {
+
+        for (OptionRequest o : question.getOptionRequests()) {
+            if(o.getOption() != null) {
                 Option option = new Option(o);
                 question1.getOptions().add(option);
                 option.setQuestion(question1);
