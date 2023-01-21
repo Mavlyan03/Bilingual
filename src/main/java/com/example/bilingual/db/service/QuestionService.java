@@ -238,7 +238,7 @@ public class QuestionService {
                 () -> new NotFoundException(
                         String.format("Question with id %s not found", id)));
         question.setIsActive(!question.getIsActive());
-        if(question.getIsActive()) {
+        if (question.getIsActive()) {
             return new SimpleResponse("Question is enable");
         } else {
             return new SimpleResponse("Question is disable");
@@ -250,11 +250,44 @@ public class QuestionService {
         Question question1 = questionRepository.findById(question.getId()).orElseThrow(
                 () -> new NotFoundException(
                         String.format("Question with id %s not found", question.getId())));
+        List<OptionResponse> options = optionRepository.getOptionsByQuestionId(question1.getId());
+
+        for (OptionRequest o : question.getOptionRequests()) {
+            Option option = new Option(o);
+            question1.getOptions().add(option);
+        }
+
+        for (OptionResponse o : options) {
+            Long optionId = o.getId();
+
+            for (Long id : question.getWillDelete()) {
+                if (id.equals(optionId)) {
+                    optionRepository.deleteById(id);
+                }
+            }
+            for (Long id : question.getWillUpdate()) {
+                if (question1.getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE) ||
+                        question1.getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA)) {
+                    for (Option option : question1.getOptions()) {
+                        if (option.getIsTrue().equals(true)) {
+                            option.setIsTrue(false);
+                        }
+                    }
+                    Option option = optionRepository.findById(id).orElseThrow(
+                            () -> new NotFoundException("Option with id %s not found"));
+                    option.setIsTrue(true);
+                } else {
+                    Option option = optionRepository.findById(o.getId()).orElseThrow(
+                            () -> new NotFoundException("Option with id %s not found"));
+                    option.setIsTrue(!option.getIsTrue());
+                }
+            }
+        }
+
         questionRepository.updateQuestion(
                 question1.getId(),
                 question.getTitle(),
-                question.getDuration(),
-                question.getQuestionType());
+                question.getDuration());
         return new QuestionTestResponse(
                 question1.getId(),
                 question1.getTitle(),
