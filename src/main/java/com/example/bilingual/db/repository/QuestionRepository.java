@@ -23,8 +23,22 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Modifying
     @Transactional
-    @Query("update Question q set q.title = :title, q.duration = :duration where q.id = :id")
+    @Query("update Question q set " +
+            "q.title = :title, " +
+            "q.duration = :duration, " +
+            "q.statement = :statement, " +
+            "q.passage = :passage, " +
+            "q.correctAnswer = :correct, " +
+            "q.content = :content, " +
+            "q.numberOfReplays = :replays, " +
+            "q.minWords = :minWords  where q.id = :id")
     void updateQuestion(@Param("id") Long id,
                         @Param("title") String title,
-                        @Param("duration") Integer duration);
+                        @Param("duration") Integer duration,
+                        @Param("statement") String statement,
+                        @Param("passage") String passage,
+                        @Param("correct") String correctAnswer,
+                        @Param("content") String content,
+                        @Param("replays") Integer numberOfReplays,
+                        @Param("minWords") Integer minNumberOfWords);
 }

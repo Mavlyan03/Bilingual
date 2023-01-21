@@ -246,7 +246,7 @@ public class QuestionService {
     }
 
 
-    public QuestionTestResponse updateQuestion(UpdateQuestionRequest question) {
+    public SimpleResponse updateQuestion(UpdateQuestionRequest question) {
         Question question1 = questionRepository.findById(question.getId()).orElseThrow(
                 () -> new NotFoundException(
                         String.format("Question with id %s not found", question.getId())));
@@ -283,16 +283,16 @@ public class QuestionService {
                 }
             }
         }
-
         questionRepository.updateQuestion(
                 question1.getId(),
                 question.getTitle(),
-                question.getDuration());
-        return new QuestionTestResponse(
-                question1.getId(),
-                question1.getTitle(),
-                question1.getDuration(),
-                question1.getQuestionType(),
-                question1.getIsActive());
+                question.getDuration(),
+                question.getStatement(),
+                question.getPassage(),
+                question.getCorrectAnswer(),
+                question.getContent(),
+                question.getNumberOfReplays(),
+                question.getMinNumberOfWords());
+        return new SimpleResponse("Question updated successfully");
     }
 }

@@ -53,7 +53,7 @@ public class QuestionApi {
     @PutMapping
     @Operation(summary = "Update question",
             description = "ADMIN can update question by id")
-    public QuestionTestResponse updateQuestion(@RequestBody UpdateQuestionRequest questionRequest) {
+    public SimpleResponse updateQuestion(@RequestBody UpdateQuestionRequest questionRequest) {
         return questionService.updateQuestion(questionRequest);
     }
 }
