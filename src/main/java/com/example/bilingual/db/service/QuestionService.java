@@ -276,7 +276,7 @@ public class QuestionService {
                     Option option = optionRepository.findById(id).orElseThrow(
                             () -> new NotFoundException("Option with id %s not found"));
                     option.setIsTrue(true);
-                } else {
+                } else if(id.equals(o.getId())) {
                     Option option = optionRepository.findById(o.getId()).orElseThrow(
                             () -> new NotFoundException("Option with id %s not found"));
                     option.setIsTrue(!option.getIsTrue());

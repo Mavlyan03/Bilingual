@@ -29,7 +29,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
             "q.statement = :statement, " +
             "q.passage = :passage, " +
             "q.correctAnswer = :correct, " +
-            "q.content = :content, " +
+            "q.content.content = :content, " +
             "q.numberOfReplays = :replays, " +
             "q.minWords = :minWords  where q.id = :id")
     void updateQuestion(@Param("id") Long id,
