@@ -252,9 +252,12 @@ public class QuestionService {
                         String.format("Question with id %s not found", question.getId())));
         List<OptionResponse> options = optionRepository.getOptionsByQuestionId(question1.getId());
 
-        for (OptionRequest o : question.getOptionRequests()) {
-            Option option = new Option(o);
-            question1.getOptions().add(option);
+        if(!question.getOptionRequests().isEmpty()) {
+            for (OptionRequest o : question.getOptionRequests()) {
+                Option option = new Option(o);
+                question1.getOptions().add(option);
+                option.setQuestion(question1);
+            }
         }
 
         for (OptionResponse o : options) {
@@ -290,9 +293,13 @@ public class QuestionService {
                 question.getStatement(),
                 question.getPassage(),
                 question.getCorrectAnswer(),
-                question.getContent(),
                 question.getNumberOfReplays(),
                 question.getMinNumberOfWords());
+        if(question1.getContent() == null) {
+            question1.setContent(null);
+        } else {
+            question1.getContent().setContent(question.getContent());
+        }
         return new SimpleResponse("Question updated successfully");
     }
 }

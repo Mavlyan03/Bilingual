@@ -29,7 +29,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
             "q.statement = :statement, " +
             "q.passage = :passage, " +
             "q.correctAnswer = :correct, " +
-            "q.content.content = :content, " +
             "q.numberOfReplays = :replays, " +
             "q.minWords = :minWords  where q.id = :id")
     void updateQuestion(@Param("id") Long id,
@@ -38,7 +37,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
                         @Param("statement") String statement,
                         @Param("passage") String passage,
                         @Param("correct") String correctAnswer,
-                        @Param("content") String content,
                         @Param("replays") Integer numberOfReplays,
                         @Param("minWords") Integer minNumberOfWords);
 }
