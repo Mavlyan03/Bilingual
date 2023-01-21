@@ -11,8 +11,10 @@ import com.example.bilingual.db.repository.QuestionRepository;
 import com.example.bilingual.db.repository.TestRepository;
 import com.example.bilingual.dto.request.OptionRequest;
 import com.example.bilingual.dto.request.QuestionRequest;
+import com.example.bilingual.dto.request.UpdateQuestionRequest;
 import com.example.bilingual.dto.response.OptionResponse;
 import com.example.bilingual.dto.response.QuestionResponse;
+import com.example.bilingual.dto.response.QuestionTestResponse;
 import com.example.bilingual.dto.response.SimpleResponse;
 import com.example.bilingual.exception.BadRequestException;
 import com.example.bilingual.exception.NotFoundException;
@@ -241,5 +243,23 @@ public class QuestionService {
         } else {
             return new SimpleResponse("Question is disable");
         }
+    }
+
+
+    public QuestionTestResponse updateQuestion(UpdateQuestionRequest question) {
+        Question question1 = questionRepository.findById(question.getId()).orElseThrow(
+                () -> new NotFoundException(
+                        String.format("Question with id %s not found", question.getId())));
+        questionRepository.updateQuestion(
+                question1.getId(),
+                question.getTitle(),
+                question.getDuration(),
+                question.getQuestionType());
+        return new QuestionTestResponse(
+                question1.getId(),
+                question1.getTitle(),
+                question1.getDuration(),
+                question1.getQuestionType(),
+                question1.getIsActive());
     }
 }
