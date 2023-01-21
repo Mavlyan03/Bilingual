@@ -11,8 +11,10 @@ import com.example.bilingual.db.repository.QuestionRepository;
 import com.example.bilingual.db.repository.TestRepository;
 import com.example.bilingual.dto.request.OptionRequest;
 import com.example.bilingual.dto.request.QuestionRequest;
+import com.example.bilingual.dto.request.UpdateQuestionRequest;
 import com.example.bilingual.dto.response.OptionResponse;
 import com.example.bilingual.dto.response.QuestionResponse;
+import com.example.bilingual.dto.response.QuestionTestResponse;
 import com.example.bilingual.dto.response.SimpleResponse;
 import com.example.bilingual.exception.BadRequestException;
 import com.example.bilingual.exception.NotFoundException;
@@ -236,10 +238,69 @@ public class QuestionService {
                 () -> new NotFoundException(
                         String.format("Question with id %s not found", id)));
         question.setIsActive(!question.getIsActive());
-        if(question.getIsActive()) {
+        if (question.getIsActive()) {
             return new SimpleResponse("Question is enable");
         } else {
             return new SimpleResponse("Question is disable");
         }
+    }
+
+
+    public SimpleResponse updateQuestion(UpdateQuestionRequest question) {
+        Question question1 = questionRepository.findById(question.getId()).orElseThrow(
+                () -> new NotFoundException(
+                        String.format("Question with id %s not found", question.getId())));
+        List<OptionResponse> options = optionRepository.getOptionsByQuestionId(question1.getId());
+
+
+        for (OptionRequest o : question.getOptionRequests()) {
+            if(o.getOption() != null) {
+                Option option = new Option(o);
+                question1.getOptions().add(option);
+                option.setQuestion(question1);
+            }
+        }
+
+        for (OptionResponse o : options) {
+            Long optionId = o.getId();
+
+            for (Long id : question.getWillDelete()) {
+                if (id.equals(optionId)) {
+                    optionRepository.deleteById(id);
+                }
+            }
+            for (Long id : question.getWillUpdate()) {
+                if (question1.getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE) ||
+                        question1.getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA)) {
+                    for (Option option : question1.getOptions()) {
+                        if (option.getIsTrue().equals(true)) {
+                            option.setIsTrue(false);
+                        }
+                    }
+                    Option option = optionRepository.findById(id).orElseThrow(
+                            () -> new NotFoundException("Option with id %s not found"));
+                    option.setIsTrue(true);
+                } else if(id.equals(o.getId())) {
+                    Option option = optionRepository.findById(o.getId()).orElseThrow(
+                            () -> new NotFoundException("Option with id %s not found"));
+                    option.setIsTrue(!option.getIsTrue());
+                }
+            }
+        }
+        questionRepository.updateQuestion(
+                question1.getId(),
+                question.getTitle(),
+                question.getDuration(),
+                question.getStatement(),
+                question.getPassage(),
+                question.getCorrectAnswer(),
+                question.getNumberOfReplays(),
+                question.getMinNumberOfWords());
+        if(question1.getContent() == null) {
+            question1.setContent(null);
+        } else {
+            question1.getContent().setContent(question.getContent());
+        }
+        return new SimpleResponse("Question updated successfully");
     }
 }

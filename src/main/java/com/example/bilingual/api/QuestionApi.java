@@ -2,7 +2,9 @@ package com.example.bilingual.api;
 
 import com.example.bilingual.db.service.QuestionService;
 import com.example.bilingual.dto.request.QuestionRequest;
+import com.example.bilingual.dto.request.UpdateQuestionRequest;
 import com.example.bilingual.dto.response.QuestionResponse;
+import com.example.bilingual.dto.response.QuestionTestResponse;
 import com.example.bilingual.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,5 +48,12 @@ public class QuestionApi {
             description = "ADMIN can change status of question")
     public SimpleResponse enableDisable(@PathVariable Long id) {
         return questionService.enableDisable(id);
+    }
+
+    @PutMapping
+    @Operation(summary = "Update question",
+            description = "ADMIN can update question by id")
+    public SimpleResponse updateQuestion(@RequestBody UpdateQuestionRequest questionRequest) {
+        return questionService.updateQuestion(questionRequest);
     }
 }
