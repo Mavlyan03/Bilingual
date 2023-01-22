@@ -245,7 +245,7 @@ public class QuestionService {
         }
     }
 
-
+    @Transactional
     public SimpleResponse updateQuestion(UpdateQuestionRequest question) {
         Question question1 = questionRepository.findById(question.getId()).orElseThrow(
                 () -> new NotFoundException(
@@ -254,7 +254,7 @@ public class QuestionService {
 
 
         for (OptionRequest o : question.getOptionRequests()) {
-            if(o.getOption() != null) {
+            if(o.getOption() != null || !o.getOption().isEmpty()) {
                 Option option = new Option(o);
                 question1.getOptions().add(option);
                 option.setQuestion(question1);
