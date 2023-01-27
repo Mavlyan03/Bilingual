@@ -1,16 +1,18 @@
 package com.example.bilingual.api;
 
 import com.example.bilingual.db.service.UserService;
+import com.example.bilingual.dto.request.ForgotPasswordRequest;
 import com.example.bilingual.dto.request.LoginRequest;
 import com.example.bilingual.dto.request.RegisterRequest;
 import com.example.bilingual.dto.response.LoginResponse;
 import com.example.bilingual.dto.response.RegisterResponse;
+import com.example.bilingual.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 @RestController
@@ -34,5 +36,20 @@ public class AuthApi {
             description = "User can sign up")
     public RegisterResponse register(@RequestBody @Valid RegisterRequest register) {
         return userService.register(register);
+    }
+
+    @GetMapping("/forgot/password")
+    @Operation(summary = "Forgot password",
+            description = "Send email if user forgot password")
+    public SimpleResponse forgotPassword(@RequestParam String email,
+                                         @RequestParam String link) throws MessagingException {
+        return userService.forgotPassword(email, link);
+    }
+
+    @PutMapping("/reset/password")
+    @Operation(summary = "Reset password",
+            description = "Save a new password")
+    public SimpleResponse resetPassword(@RequestBody ForgotPasswordRequest forgotPasswordRequest) {
+        return userService.resetPassword(forgotPasswordRequest);
     }
 }
