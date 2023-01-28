@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -70,13 +71,14 @@ public class UserService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
         messageHelper.setSubject("[bilingual] confirm password");
-        messageHelper.setFrom("bilingual@gmail.com");
+        messageHelper.setFrom("mavlyansadirov34@gmail.com");
         messageHelper.setTo(email);
         messageHelper.setText(link + "/" + user.getId(), true);
         javaMailSender.send(mimeMessage);
         return new SimpleResponse("Send to mail");
     }
 
+    @Transactional
     public SimpleResponse resetPassword(ForgotPasswordRequest forgotPassword) {
         User user = userRepository.findById(forgotPassword.getId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
