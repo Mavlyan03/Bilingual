@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.*;
@@ -52,7 +53,7 @@ public class QuestionAnswer {
             REFRESH,
             MERGE,
             DETACH})
-    private Set<Option> options;
+    private Set<Option> options = new HashSet<>();
 
     @ManyToOne(cascade = {
             REFRESH,

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -36,7 +37,7 @@ public class Option {
             MERGE,
             DETACH},
             mappedBy = "options")
-    private List<QuestionAnswer> questionAnswer;
+    private List<QuestionAnswer> questionAnswer = new ArrayList<>();
 
     public Option(OptionRequest option) {
         this.title = option.getTitle();
