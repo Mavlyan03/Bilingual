@@ -60,4 +60,14 @@ public class QuestionAnswer {
             MERGE,
             DETACH})
     private Result result;
+
+    public QuestionAnswer(Float score, Question question, Set<Option> options, Result result, Boolean seen, Status status) {
+        this.score = score;
+        this.question = question;
+        this.options = new HashSet<>();
+        this.options.addAll(options);
+        this.result = result;
+        this.seen = seen;
+        this.status = status;
+    }
 }
