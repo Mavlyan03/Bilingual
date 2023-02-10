@@ -10,9 +10,9 @@ import com.example.bilingual.dto.response.SimpleResponse;
 import com.example.bilingual.exception.BadRequestException;
 import com.example.bilingual.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,14 +27,14 @@ public class PassTestService {
     private final TestRepository testRepository;
     private final QuestionRepository questionRepository;
     private final OptionRepository optionRepository;
-    private final ContentRepository contentRepository;
     private final ResultRepository resultRepository;
     private final QuestionAnswerRepository answerRepository;
     private final ClientRepository clientRepository;
 
-    public SimpleResponse passTest(PassTestRequest testRequest, Principal principal) {
+    public SimpleResponse passTest(PassTestRequest testRequest, Authentication authentication) {
         Result result = new Result();
-        Client client = clientRepository.findClientByUserEmail(principal.getName()).
+        User user = (User) authentication.getPrincipal();
+        Client client = clientRepository.findClientByUserEmail(user.getEmail()).
                 orElseThrow(() -> new NotFoundException("Client not found"));
         Test test = testRepository.findById(testRequest.getTestId()).
                 orElseThrow(() -> new NotFoundException("Test not found"));

@@ -2,12 +2,14 @@ package com.example.bilingual.api;
 
 import com.example.bilingual.db.service.PassTestService;
 import com.example.bilingual.db.service.TestService;
+import com.example.bilingual.dto.request.PassTestRequest;
+import com.example.bilingual.dto.response.SimpleResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,5 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ClientApi {
 
     private final PassTestService passTestService;
-    private final TestService testService;
+
+    @PostMapping
+    @Operation(summary = "Pass test",
+            description = "CLIENT can pass test")
+    private SimpleResponse passTest(@RequestBody PassTestRequest passTestRequest,
+                                    Authentication authentication) {
+        return passTestService.passTest(passTestRequest, authentication);
+    }
 }
