@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,6 +32,7 @@ public class PassTestService {
     private final QuestionAnswerRepository answerRepository;
     private final ClientRepository clientRepository;
 
+    @Transactional
     public SimpleResponse passTest(PassTestRequest testRequest, Authentication authentication) {
         Result result = new Result();
         User user = (User) authentication.getPrincipal();
@@ -77,14 +79,14 @@ public class PassTestService {
                     }
                     QuestionAnswer questionAnswer;
                     if (countOfCorrectOptions - countOfIncorrectOptions <= 0) {
-                        questionAnswer = new QuestionAnswer(0f, question, options, result, false, Status.NOT_EVALUATED);
+                        questionAnswer = new QuestionAnswer(0f, question, options, result, false, Status.NOT_EVALUATED, question.getContent());
                     } else {
                         questionAnswer = new QuestionAnswer(
                                 (countOfCorrectOptions - countOfIncorrectOptions) * score,
-                                question, options, result, false, Status.NOT_EVALUATED);
+                                question, options, result, false, Status.NOT_EVALUATED, question.getContent());
                     }
-                    answerRepository.save(questionAnswer);
                     answers.add(questionAnswer);
+                    answerRepository.save(questionAnswer);
                 }
             }
         }

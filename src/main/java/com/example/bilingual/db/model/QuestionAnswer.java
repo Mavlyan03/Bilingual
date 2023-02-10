@@ -61,7 +61,7 @@ public class QuestionAnswer {
             DETACH})
     private Result result;
 
-    public QuestionAnswer(Float score, Question question, Set<Option> options, Result result, Boolean seen, Status status) {
+    public QuestionAnswer(Float score, Question question, Set<Option> options, Result result, Boolean seen, Status status, Content content) {
         this.score = score;
         this.question = question;
         this.options = new HashSet<>();
@@ -69,5 +69,6 @@ public class QuestionAnswer {
         this.result = result;
         this.seen = seen;
         this.status = status;
+        this.content = content;
     }
 }

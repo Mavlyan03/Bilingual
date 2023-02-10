@@ -24,7 +24,7 @@ public class ClientApi {
     @PostMapping
     @Operation(summary = "Pass test",
             description = "CLIENT can pass test")
-    private SimpleResponse passTest(@RequestBody PassTestRequest passTestRequest,
+    public SimpleResponse passTest(@RequestBody PassTestRequest passTestRequest,
                                     Authentication authentication) {
         return passTestService.passTest(passTestRequest, authentication);
     }
