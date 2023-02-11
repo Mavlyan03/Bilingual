@@ -57,41 +57,56 @@ public class PassTestService {
                     if (questions.getOptions().isEmpty() || question.getOptions() == null) {
                         throw new BadRequestException("Choose at least one option");
                     }
-                    Set<Option> correctOptions = new HashSet<>();
-                    for (Option option : question.getOptions()) {
-                        if (option.getIsTrue().equals(true)) {
-                            correctOptions.add(option);
-                        }
+                } else if (question.getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA) ||
+                        question.getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE)) {
+                    if (questions.getOptions().isEmpty() || questions.getOptions() == null) {
+                        throw new BadRequestException("Choose one correct option");
                     }
-                    float score = 10f / correctOptions.size();
-                    int countOfCorrectOptions = 0;
-                    int countOfIncorrectOptions = 0;
-                    Set<Option> options = new HashSet<>();
-                    for (Long id : questions.getOptions()) {
-                        Option option = optionRepository.findById(id).orElseThrow(
-                                () -> new NotFoundException("Option not found"));
-                        if (option.getIsTrue().equals(true)) {
-                            countOfCorrectOptions++;
-                        } else {
-                            countOfIncorrectOptions++;
-                        }
-                        options.add(option);
+                }
+                Set<Option> correctOptions = new HashSet<>();
+                for (Option option : question.getOptions()) {
+                    if (option.getIsTrue().equals(true)) {
+                        correctOptions.add(option);
                     }
-                    QuestionAnswer questionAnswer;
-                    if (countOfCorrectOptions - countOfIncorrectOptions <= 0) {
-                        questionAnswer = new QuestionAnswer(0f, question, options, result, false, Status.NOT_EVALUATED, question.getContent());
+                }
+                float score = 10f / correctOptions.size();
+                int countOfCorrectOptions = 0;
+                int countOfIncorrectOptions = 0;
+                Set<Option> options = new HashSet<>();
+                for (Long id : questions.getOptions()) {
+                    Option option = optionRepository.findById(id).orElseThrow(
+                            () -> new NotFoundException("Option not found"));
+                    if (option.getIsTrue().equals(true)) {
+                        countOfCorrectOptions++;
                     } else {
-                        questionAnswer = new QuestionAnswer(
-                                (countOfCorrectOptions - countOfIncorrectOptions) * score,
-                                question, options, result, false, Status.NOT_EVALUATED, question.getContent());
+                        countOfIncorrectOptions++;
                     }
+                    options.add(option);
+                }
+                QuestionAnswer questionAnswer;
+                if (countOfCorrectOptions - countOfIncorrectOptions <= 0) {
+                    questionAnswer = new QuestionAnswer(0f, question, options, result, false, Status.NOT_EVALUATED, question.getContent());
+                } else {
+                    questionAnswer = new QuestionAnswer(
+                            (countOfCorrectOptions - countOfIncorrectOptions) * score,
+                            question, options, result, false, Status.NOT_EVALUATED, question.getContent());
+                }
+                answers.add(questionAnswer);
+                answerRepository.save(questionAnswer);
+            } else if (question.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR) ||
+                    question.getQuestionType().equals(QuestionType.DESCRIBE_IMAGE)) {
+                if (questions.getAnswer().isEmpty() || questions.getAnswer() == null) {
+                    throw new BadRequestException("Answer shouldn't be empty!");
+                } else if (questions.getAnswer().equals(question.getCorrectAnswer())) {
+                    QuestionAnswer questionAnswer = new QuestionAnswer(10f, question, result, false,
+                            Status.NOT_EVALUATED, question.getContent(), questions.getAnswer());
                     answers.add(questionAnswer);
                     answerRepository.save(questionAnswer);
                 }
             }
         }
         float finalScore = 0f;
-        for(QuestionAnswer answer : answers) {
+        for (QuestionAnswer answer : answers) {
             finalScore += answer.getScore();
         }
         result.setScore(finalScore);

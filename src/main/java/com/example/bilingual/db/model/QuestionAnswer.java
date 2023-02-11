@@ -19,8 +19,8 @@ import static javax.persistence.CascadeType.*;
 @NoArgsConstructor
 public class QuestionAnswer {
     @Id
-    @SequenceGenerator(name = "answer_seq",sequenceName = "answer_seq",allocationSize = 1, initialValue = 10)
-    @GeneratedValue(generator = "answer_seq",strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "answer_seq", sequenceName = "answer_seq", allocationSize = 1, initialValue = 10)
+    @GeneratedValue(generator = "answer_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private Integer numberOfWords;
@@ -70,5 +70,14 @@ public class QuestionAnswer {
         this.seen = seen;
         this.status = status;
         this.content = content;
+    }
+
+    public QuestionAnswer(Float score, Question question, Result result, Boolean seen, Status status, Content content, String testResponse) {
+        this.score = score;
+        this.question = question;
+        this.result = result;
+        this.status = status;
+        this.content = content;
+        this.textResponseUser = testResponse;
     }
 }
