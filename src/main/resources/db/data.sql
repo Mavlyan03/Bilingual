@@ -24,7 +24,7 @@ INSERT INTO questions (id, correct_answer, duration, is_active, min_words, numbe
                        passage, question_number, question_type, statement, title, content_id, test_id)
 VALUES (1, null, 1, true, null, null, 'MULTIPLE', null, 1, 'SELECT_THE_REAL_ENGLISH_WORDS', null,
         'Select real english word', 3, 1),
-       (2, null, 1, true, null, null, 'MULTIPLE', null, 2, 'LISTEN_AND_SELECT_ENGLISH_WORD', null,
+       (2, null, 1, true, null, null, 'MULTIPLE', null, 2, 'LISTEN_AND_SELECT_ENGLISH_WORDS', null,
         'Select real english word', 1, 1),
        (3, 'Hello, how is it going?', 1, true, null, 2, null, null, 3, 'TYPE_WHAT_YOU_HEAR', null,
         'Write what are listening', 1, 1),

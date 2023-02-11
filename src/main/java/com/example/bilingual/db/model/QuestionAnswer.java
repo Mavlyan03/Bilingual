@@ -72,12 +72,14 @@ public class QuestionAnswer {
         this.content = content;
     }
 
-    public QuestionAnswer(Float score, Question question, Result result, Boolean seen, Status status, Content content, String testResponse) {
+    public QuestionAnswer(Float score, Question question, Result result, Boolean seen, Status status, Content content, String testResponse, Integer numberOfPlays) {
         this.score = score;
         this.question = question;
         this.result = result;
         this.status = status;
         this.content = content;
+        this.seen = seen;
+        this.countOfPlays = numberOfPlays;
         this.textResponseUser = testResponse;
     }
 }

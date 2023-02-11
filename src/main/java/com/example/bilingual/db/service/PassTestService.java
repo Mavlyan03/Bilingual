@@ -99,7 +99,7 @@ public class PassTestService {
                     throw new BadRequestException("Answer shouldn't be empty!");
                 } else if (questions.getAnswer().equals(question.getCorrectAnswer())) {
                     QuestionAnswer questionAnswer = new QuestionAnswer(10f, question, result, false,
-                            Status.NOT_EVALUATED, question.getContent(), questions.getAnswer());
+                            Status.NOT_EVALUATED, question.getContent(), questions.getAnswer(), questions.getNumberOfReplays());
                     answers.add(questionAnswer);
                     answerRepository.save(questionAnswer);
                 }
