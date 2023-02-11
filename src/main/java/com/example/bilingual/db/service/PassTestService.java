@@ -94,7 +94,8 @@ public class PassTestService {
                 answers.add(questionAnswer);
                 answerRepository.save(questionAnswer);
             } else if (question.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR) ||
-                    question.getQuestionType().equals(QuestionType.DESCRIBE_IMAGE)) {
+                    question.getQuestionType().equals(QuestionType.DESCRIBE_IMAGE) ||
+                    question.getQuestionType().equals(QuestionType.HIGHLIGHT_THE_ANSWER)) {
                 if (questions.getAnswer().isEmpty() || questions.getAnswer() == null) {
                     throw new BadRequestException("Answer shouldn't be empty!");
                 } else if (questions.getAnswer().equals(question.getCorrectAnswer())) {
