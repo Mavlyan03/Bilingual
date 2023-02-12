@@ -116,7 +116,7 @@ public class PassTestService {
                 } else {
                     String[] word = questions.getAnswer().split(" ");
                     QuestionAnswer questionAnswer;
-                    if (!(word.length == question.getMinWords())) {
+                    if (!(word.length >= question.getMinWords())) {
                         questionAnswer = new QuestionAnswer(0f, question, result, false,
                                 Status.NOT_EVALUATED, question.getContent(), word.length);
                         questionAnswer.setTextResponseUser(questions.getAnswer());
