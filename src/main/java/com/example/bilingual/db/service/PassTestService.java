@@ -85,7 +85,8 @@ public class PassTestService {
                 }
                 QuestionAnswer questionAnswer;
                 if (countOfCorrectOptions - countOfIncorrectOptions <= 0) {
-                    questionAnswer = new QuestionAnswer(0f, question, options, result, false, Status.NOT_EVALUATED, question.getContent());
+                    questionAnswer = new QuestionAnswer(0f, question, options, result, false,
+                            Status.NOT_EVALUATED, question.getContent());
                 } else {
                     questionAnswer = new QuestionAnswer(
                             (countOfCorrectOptions - countOfIncorrectOptions) * score,
@@ -115,7 +116,7 @@ public class PassTestService {
                 } else {
                     String[] word = questions.getAnswer().split(" ");
                     QuestionAnswer questionAnswer;
-                    if (!(word.length > 40 && word.length < 50)) {
+                    if (!(word.length == question.getMinWords())) {
                         questionAnswer = new QuestionAnswer(0f, question, result, false,
                                 Status.NOT_EVALUATED, question.getContent(), word.length);
                         questionAnswer.setTextResponseUser(questions.getAnswer());
@@ -127,6 +128,20 @@ public class PassTestService {
                     answers.add(questionAnswer);
                     answerRepository.save(questionAnswer);
                 }
+            } else if (question.getQuestionType().equals(QuestionType.RECORD_SAYING_STATEMENT)) {
+                if (questions.getAnswer().isEmpty() || questions.getAnswer() == null) {
+                    throw new BadRequestException("Record saying statement!");
+                }
+                QuestionAnswer questionAnswer;
+                if (!questions.getAnswer().equals(question.getCorrectAnswer())) {
+                    questionAnswer = new QuestionAnswer(0f, question, result, false, Status.NOT_EVALUATED,
+                            question.getContent(), questions.getAnswer());
+                } else {
+                    questionAnswer = new QuestionAnswer(10f, question, result, false, Status.NOT_EVALUATED,
+                            question.getContent(), questions.getAnswer());
+                }
+                answers.add(questionAnswer);
+                answerRepository.save(questionAnswer);
             }
         }
         float finalScore = 0f;

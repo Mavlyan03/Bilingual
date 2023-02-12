@@ -92,4 +92,14 @@ public class QuestionAnswer {
         this.seen = seen;
         this.numberOfWords = numberOfWords;
     }
+
+    public QuestionAnswer(Float score, Question question, Result result, Boolean seen, Status status, Content content, String textResponseUser) {
+        this.score = score;
+        this.question = question;
+        this.result = result;
+        this.status = status;
+        this.content = content;
+        this.seen = seen;
+        this.textResponseUser = textResponseUser;
+    }
 }
