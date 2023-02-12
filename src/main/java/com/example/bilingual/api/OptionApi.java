@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("option/api")
 @PreAuthorize("hasAuthority('ADMIN')")
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Tag(name = "Option API", description = "ADMIn option endpoints")
+@Tag(name = "Option API", description = "ADMIN option endpoints")
 public class OptionApi {
 
     private final OptionService optionService;

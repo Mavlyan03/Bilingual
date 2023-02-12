@@ -22,9 +22,9 @@ VALUES (1, 'audio', 'AUDIO'),
 
 INSERT INTO questions (id, correct_answer, duration, is_active, min_words, number_of_replays, option_type,
                        passage, question_number, question_type, statement, title, content_id, test_id)
-VALUES (1, null, 1, true, null, null, 'MULTIPLE', null, 1, 'SELECT_REAL_ENGLISH_WORDS', null,
+VALUES (1, null, 1, true, null, null, 'MULTIPLE', null, 1, 'SELECT_THE_REAL_ENGLISH_WORDS', null,
         'Select real english word', 3, 1),
-       (2, null, 1, true, null, null, 'MULTIPLE', null, 2, 'LISTEN_AND_SELECT_WORD', null,
+       (2, null, 1, true, null, null, 'MULTIPLE', null, 2, 'LISTEN_AND_SELECT_ENGLISH_WORDS', null,
         'Select real english word', 1, 1),
        (3, 'Hello, how is it going?', 1, true, null, 2, null, null, 3, 'TYPE_WHAT_YOU_HEAR', null,
         'Write what are listening', 1, 1),
@@ -42,10 +42,10 @@ VALUES (1, null, 1, true, null, null, 'MULTIPLE', null, 1, 'SELECT_REAL_ENGLISH_
         3, 1),
        (8, null, 1, true, null, null, 'SINGLETON',
         'We study one of the modern languages at school. It is English. It is my favourite subject. At the lessons of English we learn to read, write and speak. We learn the History and Geography of bur country, Great Britain and the USA. We read stories after famous English and American children is writers. I like stories after Alan Milne, Donald Bisset, Lewis Carroll, Mark Twain and others. I want to be clever at English because English will help me in my future life. I shall read books in English, watch films and listen to songs and understand them. But what is more important, I shall speak with people from other countries and we will understand each other. We will make friends and will live in peace.',
-        8, 'SELECT_MAIN_IDEA', null, 'Select the main idea that is expressed in the passage', 3, 1),
+        8, 'SELECT_THE_MAIN_IDEA', null, 'Select the main idea that is expressed in the passage', 3, 1),
        (9, null, 1, true, null, null, 'SINGLETON',
         'A programming language is a system of notation for writing computer programs. Most programming languages are text-based formal languages, but they may also be graphical. They are a kind of computer language. The description of a programming language is usually split into the two components of syntax (form) and semantics (meaning), which are usually defined by a formal language. Some languages are defined by a specification document (for example, the C programming language is specified by an ISO Standard) while other languages (such as Perl) have a dominant implementation that is treated as a reference. Some languages have both, with the basic language defined by a standard and extensions taken from the dominant implementation being common. Programming language theory is a subfield of computer science that deals with the design, implementation, analysis, characterization, and classification of programming languages.',
-        9, 'SELECT_BEST_TITLE', null, 'Select the best title for the passage', 3, 1);
+        9, 'SELECT_THE_BEST_TITLE', null, 'Select the best title for the passage', 3, 1);
 
 INSERT INTO options (id, is_true, title, option, question_id)
 VALUES (1, true, 'string', null, 1),
