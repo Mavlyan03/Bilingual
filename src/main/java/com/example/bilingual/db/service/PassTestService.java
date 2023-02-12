@@ -96,11 +96,34 @@ public class PassTestService {
             } else if (question.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR) ||
                     question.getQuestionType().equals(QuestionType.DESCRIBE_IMAGE) ||
                     question.getQuestionType().equals(QuestionType.HIGHLIGHT_THE_ANSWER)) {
+                QuestionAnswer questionAnswer;
                 if (questions.getAnswer().isEmpty() || questions.getAnswer() == null) {
                     throw new BadRequestException("Answer shouldn't be empty!");
-                } else if (questions.getAnswer().equals(question.getCorrectAnswer())) {
-                    QuestionAnswer questionAnswer = new QuestionAnswer(10f, question, result, false,
-                            Status.NOT_EVALUATED, question.getContent(), questions.getAnswer(), questions.getNumberOfReplays());
+                } else if (!questions.getAnswer().equals(question.getCorrectAnswer())) {
+                    questionAnswer = new QuestionAnswer(0f, question, result, false, Status.NOT_EVALUATED,
+                            question.getContent(), questions.getAnswer(), questions.getNumberOfReplays());
+                } else {
+                    questionAnswer = new QuestionAnswer(10f, question, result, false, Status.NOT_EVALUATED,
+                            question.getContent(), questions.getAnswer(), questions.getNumberOfReplays());
+                }
+                answers.add(questionAnswer);
+                answerRepository.save(questionAnswer);
+
+            } else if (question.getQuestionType().equals(QuestionType.RESPOND_IN_AT_LEAST_N_WORDS)) {
+                if (questions.getAnswer().isEmpty() || questions.getAnswer() == null) {
+                    throw new BadRequestException("Response shouldn't be empty!");
+                } else {
+                    String[] word = questions.getAnswer().split(" ");
+                    QuestionAnswer questionAnswer;
+                    if (!(word.length > 40 && word.length < 50)) {
+                        questionAnswer = new QuestionAnswer(0f, question, result, false,
+                                Status.NOT_EVALUATED, question.getContent(), word.length);
+                        questionAnswer.setTextResponseUser(questions.getAnswer());
+                    } else {
+                        questionAnswer = new QuestionAnswer(10f, question, result, false,
+                                Status.NOT_EVALUATED, question.getContent(), word.length);
+                        questionAnswer.setTextResponseUser(questions.getAnswer());
+                    }
                     answers.add(questionAnswer);
                     answerRepository.save(questionAnswer);
                 }
