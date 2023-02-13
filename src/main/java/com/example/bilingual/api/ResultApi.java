@@ -33,6 +33,7 @@ public class ResultApi {
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete result",
             description = "ADMIN can delete result by id")
+    @PreAuthorize("hasAnyAuthority('CLIENT','ADMIN')")
     public SimpleResponse deleteResult(@PathVariable Long id) {
         return resultService.deleteResult(id);
     }
