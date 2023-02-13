@@ -1,15 +1,15 @@
 package com.example.bilingual.db.service;
 
+import com.example.bilingual.db.model.Client;
 import com.example.bilingual.db.model.Result;
+import com.example.bilingual.db.model.User;
+import com.example.bilingual.db.repository.ClientRepository;
 import com.example.bilingual.db.repository.QuestionAnswerRepository;
 import com.example.bilingual.db.repository.ResultRepository;
-import com.example.bilingual.db.repository.UserRepository;
-import com.example.bilingual.dto.response.QuestionAnswerResponse;
-import com.example.bilingual.dto.response.ResultResponse;
-import com.example.bilingual.dto.response.SimpleResponse;
-import com.example.bilingual.dto.response.ViewResultResponse;
+import com.example.bilingual.dto.response.*;
 import com.example.bilingual.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +20,17 @@ public class ResultService {
 
     private final ResultRepository resultRepository;
     private final QuestionAnswerRepository answerRepository;
-    private final UserRepository userRepository;
+    private final ClientRepository clientRepository;
 
     public List<ResultResponse> getAllResults() {
         return resultRepository.getAllResults();
+    }
+
+    public List<ClientResultResponse> getAllClientResults(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        Client client = clientRepository.findClientByUserEmail(user.getEmail()).
+                orElseThrow(() -> new NotFoundException("Client not found"));
+        return resultRepository.getAllClientResults(client.getId());
     }
 
     public SimpleResponse deleteResult(Long id) {
