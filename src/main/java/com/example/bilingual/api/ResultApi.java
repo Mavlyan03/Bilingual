@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 @RestController
@@ -27,6 +28,13 @@ public class ResultApi {
             description = "ADMIN can get all results")
     public List<ResultResponse> getAllResults() {
         return resultService.getAllResults();
+    }
+
+    @GetMapping("/email/{id}")
+    @Operation(summary = "Send result to user's email",
+            description = "ADMIN can send result to user's email")
+    public SimpleResponse sendResultToEmail(@PathVariable Long id) throws MessagingException {
+        return resultService.sendResultsToEmail(id);
     }
 
     @DeleteMapping("/{id}")
