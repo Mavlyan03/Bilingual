@@ -18,7 +18,7 @@ public interface ResultRepository extends JpaRepository<Result, Long> {
             "r.dateOfSubmission," +
             "r.test.title," +
             "r.status," +
-            "r.score) from Result r")
+            "r.score) from Result r order by r.status desc, r.dateOfSubmission")
     List<ResultResponse> getAllResults();
 
     @Query("select new com.example.bilingual.dto.response.ClientResultResponse(" +
