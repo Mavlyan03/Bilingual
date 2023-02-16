@@ -1,11 +1,15 @@
 package com.example.bilingual.db.service;
 
 import com.example.bilingual.db.model.Client;
+import com.example.bilingual.db.model.QuestionAnswer;
 import com.example.bilingual.db.model.Result;
 import com.example.bilingual.db.model.User;
+import com.example.bilingual.db.model.enums.QuestionType;
+import com.example.bilingual.db.model.enums.Status;
 import com.example.bilingual.db.repository.ClientRepository;
 import com.example.bilingual.db.repository.QuestionAnswerRepository;
 import com.example.bilingual.db.repository.ResultRepository;
+import com.example.bilingual.dto.request.ScoreRequest;
 import com.example.bilingual.dto.response.*;
 import com.example.bilingual.exception.NotFoundException;
 import com.example.bilingual.security.jwt.JwtTokenUtil;
@@ -36,7 +40,9 @@ public class ResultService {
     }
 
     public SimpleResponse sendResultsToEmail(Long id) throws MessagingException {
-        Client client = clientRepository.findById(id).orElseThrow(
+        Result result = resultRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Result not found"));
+        Client client = clientRepository.findById(result.getClient().getId()).orElseThrow(
                 () -> new NotFoundException("Client not found"));
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
@@ -46,6 +52,22 @@ public class ResultService {
         messageHelper.setText("Result sent to user's email", true);
         javaMailSender.send(mimeMessage);
         return new SimpleResponse("Result sent to users' email successfully");
+    }
+
+    public CheckQuestionResponse giveScoreForQuestion(ScoreRequest scoreRequest) {
+        QuestionAnswer answer = answerRepository.findById(scoreRequest.getQuestionId())
+                .orElseThrow(() -> new NotFoundException("Question answer not found"));
+        if(answer.getQuestion().getQuestionType().equals(QuestionType.SELECT_THE_REAL_ENGLISH_WORDS) ||
+                answer.getQuestion().getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS) ||
+                answer.getQuestion().getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA) ||
+                answer.getQuestion().getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE)) {
+            answer.setScore(answer.getScore());
+        } else {
+            answer.setScore(scoreRequest.getScore());
+        }
+        answer.setStatus(Status.EVALUATED);
+        answer.setSeen(true);
+        return null;
     }
 
     public List<ClientResultResponse> getAllClientResults(Authentication authentication) {
@@ -71,6 +93,4 @@ public class ResultService {
         result.setQuestions(questions);
         return result;
     }
-
-
 }

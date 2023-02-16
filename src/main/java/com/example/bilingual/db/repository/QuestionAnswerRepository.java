@@ -1,6 +1,7 @@
 package com.example.bilingual.db.repository;
 
 import com.example.bilingual.db.model.QuestionAnswer;
+import com.example.bilingual.dto.response.CheckQuestionResponse;
 import com.example.bilingual.dto.response.QuestionAnswerResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
