@@ -32,8 +32,6 @@ public class ResultService {
     private final QuestionAnswerRepository answerRepository;
     private final ClientRepository clientRepository;
     private final JavaMailSender javaMailSender;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtTokenUtil jwtTokenUtil;
 
     public List<ResultResponse> getAllResults() {
         return resultRepository.getAllResults();
@@ -101,13 +99,16 @@ public class ResultService {
         return resultRepository.getAllClientResults(client.getId());
     }
 
-    public SimpleResponse deleteResult(Long id) {
+    public List<ResultResponse> deleteResult(Long id) {
+        resultRepository.deleteById(id);
+        return getAllResults();
+    }
+
+    public List<ClientResultResponse> delete(Long id, Authentication authentication) {
         Result result = resultRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Result not found"));
-        result.setTest(null);
-        result.setClient(null);
         resultRepository.delete(result);
-        return new SimpleResponse("Result deleted successfully");
+        return getAllClientResults(authentication);
     }
 
     public ViewResultResponse getResultById(Long id) {

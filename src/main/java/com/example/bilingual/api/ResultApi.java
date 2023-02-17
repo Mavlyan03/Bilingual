@@ -2,6 +2,7 @@ package com.example.bilingual.api;
 
 import com.example.bilingual.db.service.ResultService;
 import com.example.bilingual.dto.request.ScoreRequest;
+import com.example.bilingual.dto.response.ClientResultResponse;
 import com.example.bilingual.dto.response.ResultResponse;
 import com.example.bilingual.dto.response.SimpleResponse;
 import com.example.bilingual.dto.response.ViewResultResponse;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -44,12 +46,21 @@ public class ResultApi {
     public ViewResultResponse giveScoreToQuestion(@RequestBody ScoreRequest scoreRequest) {
         return resultService.giveScoreForQuestion(scoreRequest);
     }
-    @DeleteMapping("/{id}")
+
+    @DeleteMapping("/result/{id}")
     @Operation(summary = "Delete result",
             description = "ADMIN can delete result by id")
-    @PreAuthorize("hasAnyAuthority('CLIENT','ADMIN')")
-    public SimpleResponse deleteResult(@PathVariable Long id) {
+    public List<ResultResponse> deleteResult(@PathVariable Long id) {
         return resultService.deleteResult(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete clients result",
+            description = "CLIENT can delete own results")
+    @PreAuthorize("hasAuthority('CLIENT')")
+    public List<ClientResultResponse> delete(@PathVariable Long id,
+                                             Authentication authentication) {
+        return resultService.delete(id, authentication);
     }
 
     @GetMapping("/{id}")
