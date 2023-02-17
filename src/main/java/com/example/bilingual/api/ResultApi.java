@@ -1,6 +1,7 @@
 package com.example.bilingual.api;
 
 import com.example.bilingual.db.service.ResultService;
+import com.example.bilingual.dto.request.ScoreRequest;
 import com.example.bilingual.dto.response.ResultResponse;
 import com.example.bilingual.dto.response.SimpleResponse;
 import com.example.bilingual.dto.response.ViewResultResponse;
@@ -37,6 +38,12 @@ public class ResultApi {
         return resultService.sendResultsToEmail(id);
     }
 
+    @PutMapping("/score")
+    @Operation(summary = "Give a score to the question",
+            description = "ADMIN can give a score to the question")
+    public ViewResultResponse giveScoreToQuestion(@RequestBody ScoreRequest scoreRequest) {
+        return resultService.giveScoreForQuestion(scoreRequest);
+    }
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete result",
             description = "ADMIN can delete result by id")

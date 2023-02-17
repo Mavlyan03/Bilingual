@@ -1,6 +1,7 @@
 package com.example.bilingual.db.repository;
 
 import com.example.bilingual.db.model.Result;
+import com.example.bilingual.dto.response.CheckQuestionResponse;
 import com.example.bilingual.dto.response.ClientResultResponse;
 import com.example.bilingual.dto.response.ResultResponse;
 import com.example.bilingual.dto.response.ViewResultResponse;

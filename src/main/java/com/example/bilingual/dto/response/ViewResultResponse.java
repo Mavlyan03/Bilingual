@@ -1,6 +1,7 @@
 package com.example.bilingual.dto.response;
 
 import com.example.bilingual.db.model.enums.Status;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class ViewResultResponse {
     private Long id;
     private String user;

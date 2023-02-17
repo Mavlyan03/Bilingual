@@ -54,10 +54,34 @@ public class ResultService {
         return new SimpleResponse("Result sent to users' email successfully");
     }
 
-    public CheckQuestionResponse giveScoreForQuestion(ScoreRequest scoreRequest) {
+    public ViewResultResponse giveResultResponse(Long id) {
+        Result result = resultRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Result not found"));
+        Float score = 0f;
+        int status = 0;
+        for (QuestionAnswer questionAnswer : result.getQuestionAnswers()) {
+            score += questionAnswer.getScore();
+            if (questionAnswer.getStatus() == Status.NOT_EVALUATED) {
+                status++;
+            }
+        }
+        result.setScore(score);
+        if (status == 0) {
+            result.setStatus(Status.EVALUATED);
+        }
+        return new ViewResultResponse(
+                result.getId(),
+                result.getClient().getFirstName() + " " + result.getClient().getLastName(),
+                result.getTest().getTitle(),
+                result.getDateOfSubmission(),
+                result.getScore(),
+                result.getStatus(), answerRepository.getAllQuestionAnswerByResultId(result.getId()));
+    }
+
+    public ViewResultResponse giveScoreForQuestion(ScoreRequest scoreRequest) {
         QuestionAnswer answer = answerRepository.findById(scoreRequest.getQuestionId())
                 .orElseThrow(() -> new NotFoundException("Question answer not found"));
-        if(answer.getQuestion().getQuestionType().equals(QuestionType.SELECT_THE_REAL_ENGLISH_WORDS) ||
+        if (answer.getQuestion().getQuestionType().equals(QuestionType.SELECT_THE_REAL_ENGLISH_WORDS) ||
                 answer.getQuestion().getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS) ||
                 answer.getQuestion().getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA) ||
                 answer.getQuestion().getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE)) {
@@ -67,7 +91,7 @@ public class ResultService {
         }
         answer.setStatus(Status.EVALUATED);
         answer.setSeen(true);
-        return null;
+        return giveResultResponse(answer.getResult().getId());
     }
 
     public List<ClientResultResponse> getAllClientResults(Authentication authentication) {
