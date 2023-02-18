@@ -43,4 +43,8 @@ public class CheckQuestionResponse {
 
     private Integer userNumberOfPlays;
 
+    public CheckQuestionResponse(List<OptionResponse> options, List<OptionResponse> userOptions) {
+        this.options = options;
+        this.userOptionsAnswer = userOptions;
+    }
 }

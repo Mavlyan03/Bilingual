@@ -1,27 +1,24 @@
 package com.example.bilingual.db.service;
 
-import com.example.bilingual.db.model.Client;
-import com.example.bilingual.db.model.QuestionAnswer;
-import com.example.bilingual.db.model.Result;
-import com.example.bilingual.db.model.User;
+import com.example.bilingual.db.model.*;
 import com.example.bilingual.db.model.enums.QuestionType;
 import com.example.bilingual.db.model.enums.Status;
 import com.example.bilingual.db.repository.ClientRepository;
 import com.example.bilingual.db.repository.QuestionAnswerRepository;
+import com.example.bilingual.db.repository.QuestionRepository;
 import com.example.bilingual.db.repository.ResultRepository;
 import com.example.bilingual.dto.request.ScoreRequest;
 import com.example.bilingual.dto.response.*;
 import com.example.bilingual.exception.NotFoundException;
-import com.example.bilingual.security.jwt.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,6 +27,7 @@ public class ResultService {
 
     private final ResultRepository resultRepository;
     private final QuestionAnswerRepository answerRepository;
+    private final QuestionRepository questionRepository;
     private final ClientRepository clientRepository;
     private final JavaMailSender javaMailSender;
 
@@ -117,5 +115,37 @@ public class ResultService {
         List<QuestionAnswerResponse> questions = answerRepository.getAllQuestionAnswerByResultId(id);
         result.setQuestions(questions);
         return result;
+    }
+
+    public CheckQuestionResponse getAnswer(Long id) {
+        CheckQuestionResponse checkResponse = null;
+        QuestionAnswer answer = answerRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Answer not found"));
+        Question question = questionRepository.findById(answer.getQuestion().getId())
+                .orElseThrow(() -> new NotFoundException("Question not found"));
+        if (question.getQuestionType().equals(QuestionType.SELECT_THE_REAL_ENGLISH_WORDS) ||
+                question.getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS)) {
+            List<OptionResponse> options = new ArrayList<>();
+            for (Option option : question.getOptions()) {
+                options.add(new OptionResponse(option));
+            }
+            List<OptionResponse> userOptions = new ArrayList<>();
+            for (Option o : answer.getOptions()) {
+                userOptions.add(new OptionResponse(o.getId(), o.getTitle(), o.getOption()));
+            }
+            checkResponse = new CheckQuestionResponse(options, userOptions);
+        } else if (question.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR)) {
+
+        }
+        assert checkResponse != null;
+        checkResponse.setId(answer.getId());
+        checkResponse.setUser(answer.getResult().getClient().getFirstName()
+                + " " + answer.getResult().getClient().getLastName());
+        checkResponse.setTestTitle(answer.getResult().getTest().getTitle());
+        checkResponse.setQuestionTitle(answer.getQuestion().getTitle());
+        checkResponse.setDuration(answer.getQuestion().getDuration());
+        checkResponse.setQuestionType(answer.getQuestion().getQuestionType());
+        checkResponse.setScoreOfQuestion(answer.getScore());
+        return checkResponse;
     }
 }
