@@ -140,42 +140,33 @@ public class ResultService {
                     answer.getTextResponseUser(),
                     answer.getCountOfPlays(),
                     question.getNumberOfReplays());
-        } else if(question.getQuestionType().equals(QuestionType.DESCRIBE_IMAGE)) {
+        } else if (question.getQuestionType().equals(QuestionType.DESCRIBE_IMAGE)) {
             checkResponse = new CheckQuestionResponse(question.getCorrectAnswer(), answer.getTextResponseUser());
-        } else if(question.getQuestionType().equals(QuestionType.RECORD_SAYING_STATEMENT)) {
+        } else if (question.getQuestionType().equals(QuestionType.RECORD_SAYING_STATEMENT)) {
             checkResponse = new CheckQuestionResponse(question.getStatement(), answer.getTextResponseUser());
-        } else if(question.getQuestionType().equals(QuestionType.RESPOND_IN_AT_LEAST_N_WORDS)) {
+        } else if (question.getQuestionType().equals(QuestionType.RESPOND_IN_AT_LEAST_N_WORDS)) {
             checkResponse = new CheckQuestionResponse(
                     question.getMinWords(),
                     question.getStatement(),
                     answer.getTextResponseUser(),
                     answer.getNumberOfWords());
-        } else if(question.getQuestionType().equals(QuestionType.HIGHLIGHT_THE_ANSWER)) {
+        } else if (question.getQuestionType().equals(QuestionType.HIGHLIGHT_THE_ANSWER)) {
             checkResponse = new CheckQuestionResponse(
                     question.getPassage(),
                     question.getStatement(),
                     question.getCorrectAnswer(),
                     answer.getTextResponseUser());
-        } else if(question.getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA)) {
+        } else if (question.getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA) ||
+                question.getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE)) {
             List<OptionResponse> options = new ArrayList<>();
-            for(Option option : question.getOptions()) {
+            for (Option option : question.getOptions()) {
                 options.add(new OptionResponse(option));
             }
             List<OptionResponse> userOptions = new ArrayList<>();
-            for(Option o : answer.getOptions()) {
-                userOptions.add(new OptionResponse(o.getId(),o.getTitle(),o.getOption()));
+            for (Option o : answer.getOptions()) {
+                userOptions.add(new OptionResponse(o.getId(), o.getTitle(), o.getOption()));
             }
-            checkResponse = new CheckQuestionResponse(question.getPassage(),options,userOptions);
-        } else if(question.getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE)) {
-            List<OptionResponse> options = new ArrayList<>();
-            for(Option option : question.getOptions()) {
-                options.add(new OptionResponse(option));
-            }
-            List<OptionResponse> userOptions = new ArrayList<>();
-            for(Option o : answer.getOptions()) {
-                userOptions.add(new OptionResponse(o.getId(),o.getTitle(),o.getOption()));
-            }
-            checkResponse = new CheckQuestionResponse(question.getPassage(),options,userOptions);
+            checkResponse = new CheckQuestionResponse(question.getPassage(), options, userOptions);
         }
         assert checkResponse != null;
         checkResponse.setId(answer.getId());
@@ -185,7 +176,9 @@ public class ResultService {
         checkResponse.setQuestionTitle(answer.getQuestion().getTitle());
         checkResponse.setDuration(answer.getQuestion().getDuration());
         checkResponse.setQuestionType(answer.getQuestion().getQuestionType());
-        checkResponse.setScoreOfQuestion(answer.getScore());
+        if (answer.getQuestion().getQuestionType() != QuestionType.DESCRIBE_IMAGE) {
+            checkResponse.setScoreOfQuestion(answer.getScore());
+        }
         return checkResponse;
     }
 }

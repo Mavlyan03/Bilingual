@@ -2,10 +2,7 @@ package com.example.bilingual.api;
 
 import com.example.bilingual.db.service.ResultService;
 import com.example.bilingual.dto.request.ScoreRequest;
-import com.example.bilingual.dto.response.ClientResultResponse;
-import com.example.bilingual.dto.response.ResultResponse;
-import com.example.bilingual.dto.response.SimpleResponse;
-import com.example.bilingual.dto.response.ViewResultResponse;
+import com.example.bilingual.dto.response.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -68,5 +65,12 @@ public class ResultApi {
             description = "ADMIN can get result by id")
     public ViewResultResponse getResultById(@PathVariable Long id) {
         return resultService.getResultById(id);
+    }
+
+    @GetMapping("/answer/{id}")
+    @Operation(summary = "Answer response",
+            description = "ADMIN can get client answer response for evaluation")
+    public CheckQuestionResponse getAnswer(@PathVariable Long id) {
+        return resultService.getAnswer(id);
     }
 }
