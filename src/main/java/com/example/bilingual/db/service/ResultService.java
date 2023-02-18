@@ -135,7 +135,47 @@ public class ResultService {
             }
             checkResponse = new CheckQuestionResponse(options, userOptions);
         } else if (question.getQuestionType().equals(QuestionType.TYPE_WHAT_YOU_HEAR)) {
-
+            checkResponse = new CheckQuestionResponse(
+                    question.getCorrectAnswer(),
+                    answer.getTextResponseUser(),
+                    answer.getCountOfPlays(),
+                    question.getNumberOfReplays());
+        } else if(question.getQuestionType().equals(QuestionType.DESCRIBE_IMAGE)) {
+            checkResponse = new CheckQuestionResponse(question.getCorrectAnswer(), answer.getTextResponseUser());
+        } else if(question.getQuestionType().equals(QuestionType.RECORD_SAYING_STATEMENT)) {
+            checkResponse = new CheckQuestionResponse(question.getStatement(), answer.getTextResponseUser());
+        } else if(question.getQuestionType().equals(QuestionType.RESPOND_IN_AT_LEAST_N_WORDS)) {
+            checkResponse = new CheckQuestionResponse(
+                    question.getMinWords(),
+                    question.getStatement(),
+                    answer.getTextResponseUser(),
+                    answer.getNumberOfWords());
+        } else if(question.getQuestionType().equals(QuestionType.HIGHLIGHT_THE_ANSWER)) {
+            checkResponse = new CheckQuestionResponse(
+                    question.getPassage(),
+                    question.getStatement(),
+                    question.getCorrectAnswer(),
+                    answer.getTextResponseUser());
+        } else if(question.getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA)) {
+            List<OptionResponse> options = new ArrayList<>();
+            for(Option option : question.getOptions()) {
+                options.add(new OptionResponse(option));
+            }
+            List<OptionResponse> userOptions = new ArrayList<>();
+            for(Option o : answer.getOptions()) {
+                userOptions.add(new OptionResponse(o.getId(),o.getTitle(),o.getOption()));
+            }
+            checkResponse = new CheckQuestionResponse(question.getPassage(),options,userOptions);
+        } else if(question.getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE)) {
+            List<OptionResponse> options = new ArrayList<>();
+            for(Option option : question.getOptions()) {
+                options.add(new OptionResponse(option));
+            }
+            List<OptionResponse> userOptions = new ArrayList<>();
+            for(Option o : answer.getOptions()) {
+                userOptions.add(new OptionResponse(o.getId(),o.getTitle(),o.getOption()));
+            }
+            checkResponse = new CheckQuestionResponse(question.getPassage(),options,userOptions);
         }
         assert checkResponse != null;
         checkResponse.setId(answer.getId());
