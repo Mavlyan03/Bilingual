@@ -38,9 +38,6 @@ public class Result {
             DETACH})
     private Test test;
 
-    @OneToMany(cascade = {
-            REFRESH,
-            MERGE,
-            DETACH}, mappedBy = "result")
+    @OneToMany(cascade = ALL, mappedBy = "result")
     private List<QuestionAnswer> questionAnswers;
 }

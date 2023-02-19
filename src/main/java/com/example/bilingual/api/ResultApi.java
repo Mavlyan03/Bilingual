@@ -44,7 +44,7 @@ public class ResultApi {
         return resultService.giveScoreForQuestion(scoreRequest);
     }
 
-    @DeleteMapping("/result/{id}")
+    @DeleteMapping("/delete/{id}")
     @Operation(summary = "Delete result",
             description = "ADMIN can delete result by id")
     public List<ResultResponse> deleteResult(@PathVariable Long id) {
