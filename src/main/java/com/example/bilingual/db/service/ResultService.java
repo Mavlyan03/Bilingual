@@ -103,7 +103,7 @@ public class ResultService {
         Result result = resultRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Result not found"));
         List<QuestionAnswer> questions = answerRepository.getAllQuestionsByResultId(id);
-        for(QuestionAnswer question : questions) {
+        for (QuestionAnswer question : questions) {
             result.getQuestionAnswers().remove(question);
             question.setResult(null);
             answerRepository.deleteQuestionAnswerById(question.getId());
@@ -115,6 +115,12 @@ public class ResultService {
     public List<ClientResultResponse> delete(Long id, Authentication authentication) {
         Result result = resultRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Result not found"));
+        List<QuestionAnswer> questions = answerRepository.getAllQuestionsByResultId(result.getId());
+        for (QuestionAnswer question : questions) {
+            result.getQuestionAnswers().remove(question);
+            question.setResult(null);
+            answerRepository.deleteQuestionAnswerById(question.getId());
+        }
         resultRepository.delete(result);
         return getAllClientResults(authentication);
     }
