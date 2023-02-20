@@ -47,7 +47,7 @@ public class ResultService {
         messageHelper.setSubject("[bilingual]");
         messageHelper.setFrom("mavlyansadirov34@gmail.com");
         messageHelper.setTo(client.getUser().getEmail());
-        messageHelper.setText("Result sent to user's email", true);
+        messageHelper.setText("Your result is " + result.getScore(), true);
         javaMailSender.send(mimeMessage);
         return new SimpleResponse("Result sent to users' email successfully");
     }
