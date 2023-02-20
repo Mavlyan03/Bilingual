@@ -100,7 +100,15 @@ public class ResultService {
     }
 
     public List<ResultResponse> deleteResult(Long id) {
-        resultRepository.deleteById(id);
+        Result result = resultRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Result not found"));
+        List<QuestionAnswer> questions = answerRepository.getAllQuestionsByResultId(id);
+        for(QuestionAnswer question : questions) {
+            result.getQuestionAnswers().remove(question);
+            question.setResult(null);
+            answerRepository.delete(question);
+        }
+        resultRepository.delete(result);
         return getAllResults();
     }
 
