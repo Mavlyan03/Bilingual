@@ -83,7 +83,7 @@ public class ResultService {
                 answer.getQuestion().getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS) ||
                 answer.getQuestion().getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA) ||
                 answer.getQuestion().getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE)) {
-            answer.setScore(answer.getScore());
+            answer.setScore(scoreRequest.getScore());
         } else {
             answer.setScore(scoreRequest.getScore());
         }
