@@ -106,7 +106,7 @@ public class ResultService {
         for(QuestionAnswer question : questions) {
             result.getQuestionAnswers().remove(question);
             question.setResult(null);
-            answerRepository.delete(question);
+            answerRepository.deleteQuestionAnswerById(question.getId());
         }
         resultRepository.delete(result);
         return getAllResults();
