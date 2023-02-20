@@ -47,7 +47,7 @@ public class ResultService {
         messageHelper.setSubject("[bilingual]");
         messageHelper.setFrom("mavlyansadirov34@gmail.com");
         messageHelper.setTo(client.getUser().getEmail());
-        messageHelper.setText("Result sent to user's email", true);
+        messageHelper.setText("Your result is " + result.getScore(), true);
         javaMailSender.send(mimeMessage);
         return new SimpleResponse("Result sent to users' email successfully");
     }
@@ -83,7 +83,7 @@ public class ResultService {
                 answer.getQuestion().getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS) ||
                 answer.getQuestion().getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA) ||
                 answer.getQuestion().getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE)) {
-            answer.setScore(answer.getScore());
+            answer.setScore(scoreRequest.getScore());
         } else {
             answer.setScore(scoreRequest.getScore());
         }
@@ -100,13 +100,27 @@ public class ResultService {
     }
 
     public List<ResultResponse> deleteResult(Long id) {
-        resultRepository.deleteById(id);
+        Result result = resultRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Result not found"));
+        List<QuestionAnswer> questions = answerRepository.getAllQuestionsByResultId(id);
+        for (QuestionAnswer question : questions) {
+            result.getQuestionAnswers().remove(question);
+            question.setResult(null);
+            answerRepository.deleteQuestionAnswerById(question.getId());
+        }
+        resultRepository.delete(result);
         return getAllResults();
     }
 
     public List<ClientResultResponse> delete(Long id, Authentication authentication) {
         Result result = resultRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Result not found"));
+        List<QuestionAnswer> questions = answerRepository.getAllQuestionsByResultId(result.getId());
+        for (QuestionAnswer question : questions) {
+            result.getQuestionAnswers().remove(question);
+            question.setResult(null);
+            answerRepository.deleteQuestionAnswerById(question.getId());
+        }
         resultRepository.delete(result);
         return getAllClientResults(authentication);
     }

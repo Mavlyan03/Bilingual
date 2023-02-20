@@ -29,7 +29,7 @@ public class Result {
     @ManyToOne(cascade = {
             REFRESH,
             MERGE,
-            DETACH})
+            DETACH}, fetch = FetchType.LAZY)
     private Client client;
 
     @ManyToOne(cascade = {

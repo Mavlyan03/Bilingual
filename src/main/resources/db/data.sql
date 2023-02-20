@@ -1,7 +1,7 @@
 INSERT INTO users(id, email, password, role)
 VALUES (1, 'admin@gmail.com', '$2a$12$LqafUxGS/5uLAAZdt3e6y.JMg9jtqwqD6oFFuXKlQZ/HbcCS41F0.',
         'ADMIN'),
-       (2, 'mavlyansadirov03@gmail.com', '$2a$12$knJX9iuGC6bpp8f5CxEJb.nXbAJYna0x4S262JKS2Huky9ERRZCFi',
+       (2, 'mavlyansadirov03@gmail.com', '$2a$12$vEJQJIfn3H6s6kJz4MQUS.1Kr0c4yiSbn2SZWIivp3ZpK/k4eGkwG',
         'CLIENT'),
        (3, 'client@gmail.com', '$2a$12$KsswQBeQJb0XLmmwpwrOt.39W4Whw/ufZoQSZEsSi2lBG1ndSX2We',
         'CLIENT');
