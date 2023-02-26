@@ -13,7 +13,7 @@ import java.util.List;
 public class QuestionResponse {
     private Long id;
     private String title;
-    private String duration;
+    private Integer duration;
     private String shortDescription;
     private QuestionType questionType;
     private Integer numberOfReplays;
@@ -29,6 +29,7 @@ public class QuestionResponse {
     public QuestionResponse(Question question) {
         this.id = question.getId();
         this.title = question.getTitle();
+        this.duration = question.getDuration();
         this.shortDescription = question.getTest().getDescription();
         this.questionType = question.getQuestionType();
         this.numberOfReplays = question.getNumberOfReplays();
