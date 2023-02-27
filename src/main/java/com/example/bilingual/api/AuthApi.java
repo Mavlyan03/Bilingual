@@ -34,7 +34,7 @@ public class AuthApi {
     @PostMapping("/sign_up")
     @Operation(summary = "Sign Up",
             description = "User can sign up")
-    public RegisterResponse register(@RequestBody @Valid RegisterRequest register) {
+    public RegisterResponse register(@Valid @RequestBody RegisterRequest register) {
         return userService.register(register);
     }
 

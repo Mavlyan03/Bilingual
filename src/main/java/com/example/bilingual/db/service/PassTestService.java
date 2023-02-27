@@ -10,6 +10,7 @@ import com.example.bilingual.dto.response.SimpleResponse;
 import com.example.bilingual.exception.BadRequestException;
 import com.example.bilingual.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +23,8 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PassTestService {
-
-    private final UserRepository userRepository;
     private final TestRepository testRepository;
     private final QuestionRepository questionRepository;
     private final OptionRepository optionRepository;
@@ -150,6 +150,7 @@ public class PassTestService {
         }
         result.setScore(finalScore);
         resultRepository.save(result);
+        log.info("Test passed successfully");
         return new SimpleResponse("Test is complete");
     }
 }

@@ -11,6 +11,7 @@ import com.example.bilingual.dto.request.ScoreRequest;
 import com.example.bilingual.dto.response.*;
 import com.example.bilingual.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class ResultService {
 
     private final ResultRepository resultRepository;
@@ -34,6 +36,7 @@ public class ResultService {
     private final JavaMailSender javaMailSender;
 
     public List<ResultResponse> getAllResults() {
+        log.info("Get all results done successfully");
         return resultRepository.getAllResults();
     }
 
@@ -49,7 +52,8 @@ public class ResultService {
         messageHelper.setTo(client.getUser().getEmail());
         messageHelper.setText("Your result is " + result.getScore(), true);
         javaMailSender.send(mimeMessage);
-        return new SimpleResponse("Result sent to users' email successfully");
+        log.info("Result sent to email successfully");
+        return new SimpleResponse("Result was successfully sent to email");
     }
 
     public ViewResultResponse giveResultResponse(Long id) {
@@ -67,6 +71,7 @@ public class ResultService {
         if (status == 0) {
             result.setStatus(Status.EVALUATED);
         }
+        log.info("Give result response was successfully");
         return new ViewResultResponse(
                 result.getId(),
                 result.getClient().getFirstName() + " " + result.getClient().getLastName(),
@@ -89,6 +94,7 @@ public class ResultService {
         }
         answer.setStatus(Status.EVALUATED);
         answer.setSeen(true);
+        log.info("Score given for question done successfully");
         return giveResultResponse(answer.getResult().getId());
     }
 
@@ -96,6 +102,7 @@ public class ResultService {
         User user = (User) authentication.getPrincipal();
         Client client = clientRepository.findClientByUserEmail(user.getEmail()).
                 orElseThrow(() -> new NotFoundException("Client not found"));
+        log.info("Get all client results done successfully");
         return resultRepository.getAllClientResults(client.getId());
     }
 
@@ -109,6 +116,7 @@ public class ResultService {
             answerRepository.deleteQuestionAnswerById(question.getId());
         }
         resultRepository.delete(result);
+        log.info("Result deleted successfully");
         return getAllResults();
     }
 
@@ -122,6 +130,7 @@ public class ResultService {
             answerRepository.deleteQuestionAnswerById(question.getId());
         }
         resultRepository.delete(result);
+        log.info("Result deleted successfully");
         return getAllClientResults(authentication);
     }
 
@@ -130,6 +139,7 @@ public class ResultService {
                 orElseThrow(() -> new NotFoundException("Result not found"));
         List<QuestionAnswerResponse> questions = answerRepository.getAllQuestionAnswerByResultId(id);
         result.setQuestions(questions);
+        log.info("Get result by id done successfully");
         return result;
     }
 
@@ -195,6 +205,7 @@ public class ResultService {
         if (answer.getQuestion().getQuestionType() != QuestionType.DESCRIBE_IMAGE) {
             checkResponse.setScoreOfQuestion(answer.getScore());
         }
+        log.info("Get answer done successfully");
         return checkResponse;
     }
 }

@@ -19,6 +19,7 @@ import com.example.bilingual.dto.response.SimpleResponse;
 import com.example.bilingual.exception.BadRequestException;
 import com.example.bilingual.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -26,6 +27,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
@@ -210,6 +212,7 @@ public class QuestionService {
                 }
             }
         }
+        log.info("The new question saved successfully");
         return new SimpleResponse("Question saved successfully");
     }
 
@@ -219,6 +222,7 @@ public class QuestionService {
                         String.format("Question with id %s not found", id)));
         question.setTest(null);
         questionRepository.delete(question);
+        log.info("Question deleted successfully");
         return new SimpleResponse("Question deleted successfully");
     }
 
@@ -229,6 +233,7 @@ public class QuestionService {
         List<OptionResponse> options = optionRepository.getOptionsByQuestionId(question.getId());
         QuestionResponse questionResponse = new QuestionResponse(question);
         questionResponse.setOptionResponses(options);
+        log.info("Get question by id successfully");
         return questionResponse;
     }
 
@@ -238,6 +243,7 @@ public class QuestionService {
                 () -> new NotFoundException(
                         String.format("Question with id %s not found", id)));
         question.setIsActive(!question.getIsActive());
+        log.info("Switch question successfully");
         if (question.getIsActive()) {
             return new SimpleResponse("Question is enable");
         } else {
@@ -301,6 +307,7 @@ public class QuestionService {
         } else {
             question1.getContent().setContent(question.getContent());
         }
+        log.info("Question updated successfully");
         return new SimpleResponse("Question updated successfully");
     }
 }
