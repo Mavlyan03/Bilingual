@@ -36,7 +36,7 @@ public class ResultService {
     private final JavaMailSender javaMailSender;
 
     public List<ResultResponse> getAllResults() {
-        log.info("Get all results was successfully");
+        log.info("Get all results done successfully");
         return resultRepository.getAllResults();
     }
 
@@ -53,7 +53,7 @@ public class ResultService {
         messageHelper.setText("Your result is " + result.getScore(), true);
         javaMailSender.send(mimeMessage);
         log.info("Result sent to email successfully");
-        return new SimpleResponse("Result sent to users' email successfully");
+        return new SimpleResponse("Result was successfully sent to email");
     }
 
     public ViewResultResponse giveResultResponse(Long id) {
@@ -94,7 +94,7 @@ public class ResultService {
         }
         answer.setStatus(Status.EVALUATED);
         answer.setSeen(true);
-        log.info("Score given for question successfully");
+        log.info("Score given for question done successfully");
         return giveResultResponse(answer.getResult().getId());
     }
 
@@ -102,7 +102,7 @@ public class ResultService {
         User user = (User) authentication.getPrincipal();
         Client client = clientRepository.findClientByUserEmail(user.getEmail()).
                 orElseThrow(() -> new NotFoundException("Client not found"));
-        log.info("Get all client results was successfully");
+        log.info("Get all client results done successfully");
         return resultRepository.getAllClientResults(client.getId());
     }
 
@@ -139,7 +139,7 @@ public class ResultService {
                 orElseThrow(() -> new NotFoundException("Result not found"));
         List<QuestionAnswerResponse> questions = answerRepository.getAllQuestionAnswerByResultId(id);
         result.setQuestions(questions);
-        log.info("Get result by id was successfully");
+        log.info("Get result by id done successfully");
         return result;
     }
 
@@ -205,7 +205,7 @@ public class ResultService {
         if (answer.getQuestion().getQuestionType() != QuestionType.DESCRIBE_IMAGE) {
             checkResponse.setScoreOfQuestion(answer.getScore());
         }
-        log.info("Get answer was successfully");
+        log.info("Get answer done successfully");
         return checkResponse;
     }
 }

@@ -49,7 +49,7 @@ public class UserService {
                 () -> new NotFoundException("User not found"));
 
         String token = jwtTokenUtil.generateToken(user.getEmail());
-        log.info("Login user with email {} and password {} was successfully",
+        log.info("Login user with email {} and password {} successfully",
                 loginRequest.getEmail(), loginRequest.getPassword());
         return new LoginResponse(
                 user.getEmail(),
@@ -65,7 +65,7 @@ public class UserService {
         Client client = new Client(registerRequest);
         Client client1 = clientRepository.save(client);
         String token = jwtTokenUtil.generateToken(client1.getUser().getEmail());
-        log.info("Register user with name {}, surname {}, email {} and password {} was successfully",
+        log.info("Register user with name {}, surname {}, email {} and password {} successfully",
                 registerRequest.getEmail(), registerRequest.getFirstName(),
                 registerRequest.getLastName(), registerRequest.getPassword());
         return new RegisterResponse(client1, token);
@@ -82,7 +82,7 @@ public class UserService {
         messageHelper.setTo(email);
         messageHelper.setText(link + "/" + user.getId(), true);
         javaMailSender.send(mimeMessage);
-        log.info("Forgot password with email {} was successfully", email);
+        log.info("Forgot password with email {} successfully", email);
         return new SimpleResponse("Send to mail");
     }
 
@@ -91,7 +91,7 @@ public class UserService {
         User user = userRepository.findById(forgotPassword.getId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
         user.setPassword(passwordEncoder.encode(forgotPassword.getPassword()));
-        log.info("Reset a new password {} was successfully", forgotPassword.getPassword());
+        log.info("Reset new password {} successfully", forgotPassword.getPassword());
         return new SimpleResponse("Password updated successfully");
     }
 }

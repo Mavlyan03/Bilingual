@@ -29,7 +29,7 @@ public class TestService {
         Test test = testRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Test not found"));
         test.setIsActive(!test.getIsActive());
-        log.info("Switch test was successfully");
+        log.info("Switch test successfully");
         if (test.getIsActive()) {
             return new SimpleResponse("Test is enable");
         } else {
@@ -67,7 +67,7 @@ public class TestService {
     }
 
     public List<TestResponse> getAllTests() {
-        log.info("Get all tests was successfully");
+        log.info("Get all tests successfully");
         return testRepository.getAllTests();
     }
 
@@ -78,7 +78,7 @@ public class TestService {
         TestInnerPageResponse testInnerPageResponse = new TestInnerPageResponse(test);
         List<QuestionTestResponse> questions = questionRepository.getAllQuestionsByTestId(test.getId());
         testInnerPageResponse.setQuestionTestResponses(questions);
-        log.info("Get test by id was successfully");
+        log.info("Get test by id successfully");
         return testInnerPageResponse;
     }
 }
