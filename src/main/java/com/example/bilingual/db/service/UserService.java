@@ -14,6 +14,7 @@ import com.example.bilingual.exception.BadRequestException;
 import com.example.bilingual.exception.NotFoundException;
 import com.example.bilingual.security.jwt.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +29,7 @@ import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -47,6 +49,8 @@ public class UserService {
                 () -> new NotFoundException("User not found"));
 
         String token = jwtTokenUtil.generateToken(user.getEmail());
+        log.info("Login user with email {} and password {} was successfully",
+                loginRequest.getEmail(), loginRequest.getPassword());
         return new LoginResponse(
                 user.getEmail(),
                 token,
@@ -54,13 +58,16 @@ public class UserService {
     }
 
     public RegisterResponse register(RegisterRequest registerRequest) {
-        if(userRepository.existsUserByEmail(registerRequest.getEmail())) {
+        if (userRepository.existsUserByEmail(registerRequest.getEmail())) {
             throw new BadRequestException("User exist with this email %s");
         }
         registerRequest.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         Client client = new Client(registerRequest);
         Client client1 = clientRepository.save(client);
         String token = jwtTokenUtil.generateToken(client1.getUser().getEmail());
+        log.info("Register user with name {}, surname {}, email {} and password {} was successfully",
+                registerRequest.getEmail(), registerRequest.getFirstName(),
+                registerRequest.getLastName(), registerRequest.getPassword());
         return new RegisterResponse(client1, token);
     }
 
@@ -75,6 +82,7 @@ public class UserService {
         messageHelper.setTo(email);
         messageHelper.setText(link + "/" + user.getId(), true);
         javaMailSender.send(mimeMessage);
+        log.info("Forgot password with email {} was successfully", email);
         return new SimpleResponse("Send to mail");
     }
 
@@ -83,6 +91,7 @@ public class UserService {
         User user = userRepository.findById(forgotPassword.getId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
         user.setPassword(passwordEncoder.encode(forgotPassword.getPassword()));
+        log.info("Reset a new password {} was successfully", forgotPassword.getPassword());
         return new SimpleResponse("Password updated successfully");
     }
 }
