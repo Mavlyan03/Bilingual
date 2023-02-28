@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("option/api")
+@RequestMapping("api/option")
 @PreAuthorize("hasAuthority('ADMIN')")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Option API", description = "ADMIN option endpoints")
