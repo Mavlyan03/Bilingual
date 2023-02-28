@@ -46,7 +46,10 @@ public class UserService {
                         loginRequest.getPassword()));
 
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow(
-                () -> new NotFoundException("User not found"));
+                () -> {
+                    log.error("User with email %s not found");
+                    throw new NotFoundException("User not found");
+                });
 
         String token = jwtTokenUtil.generateToken(user.getEmail());
         log.info("Login user with email {} and password {} successfully",
@@ -59,6 +62,7 @@ public class UserService {
 
     public RegisterResponse register(RegisterRequest registerRequest) {
         if (userRepository.existsUserByEmail(registerRequest.getEmail())) {
+            log.error("User exists with email {}", registerRequest.getEmail());
             throw new BadRequestException("User exist with this email %s");
         }
         registerRequest.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
@@ -74,7 +78,10 @@ public class UserService {
 
     public SimpleResponse forgotPassword(String email, String link) throws MessagingException {
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new NotFoundException("User with email not found"));
+                () -> {
+                    log.error("User with email {} not found", email);
+                    throw new NotFoundException("User with email not found");
+                });
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
         messageHelper.setSubject("[bilingual] confirm password");
@@ -89,7 +96,10 @@ public class UserService {
     @Transactional
     public SimpleResponse resetPassword(ForgotPasswordRequest forgotPassword) {
         User user = userRepository.findById(forgotPassword.getId())
-                .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(() -> {
+                    log.error("User with id {} not found", forgotPassword.getId());
+                    throw new NotFoundException("User not found");
+                });
         user.setPassword(passwordEncoder.encode(forgotPassword.getPassword()));
         log.info("Reset new password {} successfully", forgotPassword.getPassword());
         return new SimpleResponse("Password updated successfully");
