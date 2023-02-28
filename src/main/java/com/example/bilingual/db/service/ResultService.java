@@ -42,9 +42,15 @@ public class ResultService {
 
     public SimpleResponse sendResultsToEmail(Long id) throws MessagingException {
         Result result = resultRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Result not found"));
+                () -> {
+                    log.error("Result with id {} not found", id);
+                    throw new NotFoundException("Result not found");
+                });
         Client client = clientRepository.findById(result.getClient().getId()).orElseThrow(
-                () -> new NotFoundException("Client not found"));
+                () -> {
+                    log.error("Client with id {} not found", result.getClient().getId());
+                    throw new NotFoundException("Client not found");
+                });
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
         messageHelper.setSubject("[bilingual]");
@@ -58,7 +64,10 @@ public class ResultService {
 
     public ViewResultResponse giveResultResponse(Long id) {
         Result result = resultRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Result not found"));
+                () -> {
+                    log.error("Result with id {} not found", id);
+                    throw new NotFoundException("Result not found");
+                });
         Float score = 0f;
         int status = 0;
         for (QuestionAnswer questionAnswer : result.getQuestionAnswers()) {
@@ -83,7 +92,10 @@ public class ResultService {
 
     public ViewResultResponse giveScoreForQuestion(ScoreRequest scoreRequest) {
         QuestionAnswer answer = answerRepository.findById(scoreRequest.getQuestionId())
-                .orElseThrow(() -> new NotFoundException("Question answer not found"));
+                .orElseThrow(() -> {
+                    log.error("Question with id {} not found", scoreRequest.getQuestionId());
+                    throw new NotFoundException("Question answer not found");
+                });
         if (answer.getQuestion().getQuestionType().equals(QuestionType.SELECT_THE_REAL_ENGLISH_WORDS) ||
                 answer.getQuestion().getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS) ||
                 answer.getQuestion().getQuestionType().equals(QuestionType.SELECT_THE_MAIN_IDEA) ||
@@ -101,14 +113,20 @@ public class ResultService {
     public List<ClientResultResponse> getAllClientResults(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Client client = clientRepository.findClientByUserEmail(user.getEmail()).
-                orElseThrow(() -> new NotFoundException("Client not found"));
+                orElseThrow(() -> {
+                    log.error("Client with email {} not found", user.getEmail());
+                    throw new NotFoundException("Client not found");
+                });
         log.info("Get all client results done successfully");
         return resultRepository.getAllClientResults(client.getId());
     }
 
     public List<ResultResponse> deleteResult(Long id) {
         Result result = resultRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Result not found"));
+                () -> {
+                    log.error("Result with id {} not found", id);
+                    throw new NotFoundException("Result not found");
+                });
         List<QuestionAnswer> questions = answerRepository.getAllQuestionsByResultId(id);
         for (QuestionAnswer question : questions) {
             result.getQuestionAnswers().remove(question);
@@ -122,7 +140,10 @@ public class ResultService {
 
     public List<ClientResultResponse> delete(Long id, Authentication authentication) {
         Result result = resultRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Result not found"));
+                () -> {
+                    log.error("Result with id {} not found", id);
+                    throw new NotFoundException("Result not found");
+                });
         List<QuestionAnswer> questions = answerRepository.getAllQuestionsByResultId(result.getId());
         for (QuestionAnswer question : questions) {
             result.getQuestionAnswers().remove(question);
@@ -136,7 +157,10 @@ public class ResultService {
 
     public ViewResultResponse getResultById(Long id) {
         ViewResultResponse result = resultRepository.getResultById(id).
-                orElseThrow(() -> new NotFoundException("Result not found"));
+                orElseThrow(() -> {
+                    log.error("Result with id {} not found", id);
+                    throw new NotFoundException("Result not found");
+                });
         List<QuestionAnswerResponse> questions = answerRepository.getAllQuestionAnswerByResultId(id);
         result.setQuestions(questions);
         log.info("Get result by id done successfully");
@@ -146,9 +170,15 @@ public class ResultService {
     public CheckQuestionResponse getAnswer(Long id) {
         CheckQuestionResponse checkResponse = null;
         QuestionAnswer answer = answerRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Answer not found"));
+                () -> {
+                    log.error("Answer with id {} not found", id);
+                    throw new NotFoundException("Answer not found");
+                });
         Question question = questionRepository.findById(answer.getQuestion().getId())
-                .orElseThrow(() -> new NotFoundException("Question not found"));
+                .orElseThrow(() -> {
+                    log.error("Question with id {} not found", answer.getQuestion().getId());
+                    throw new NotFoundException("Question not found");
+                });
         if (question.getQuestionType().equals(QuestionType.SELECT_THE_REAL_ENGLISH_WORDS) ||
                 question.getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS)) {
             List<OptionResponse> options = new ArrayList<>();

@@ -28,6 +28,7 @@ public class TestService {
     public SimpleResponse enableDisable(Long id) {
         Test test = testRepository.findById(id).orElseThrow(
                 () -> {
+                    log.error("Test with id {} not found", id);
                     throw new NotFoundException("Test not found");
                 });
         test.setIsActive(!test.getIsActive());
@@ -49,6 +50,7 @@ public class TestService {
     public TestResponse updateTest(Long id, TestRequest testRequest) {
         Test test = testRepository.findById(id).orElseThrow(
                 () -> {
+                    log.error("Test with id {} not found", id);
                     throw new NotFoundException("Test not found");
                 });
         testRepository.updateTest(
@@ -65,6 +67,7 @@ public class TestService {
     public SimpleResponse deleteTest(Long id) {
         Test test = testRepository.findById(id).orElseThrow(
                 () -> {
+                    log.error("Test with id {} not found", id);
                     throw new NotFoundException("Test not found");
                 });
         testRepository.delete(test);
@@ -80,6 +83,7 @@ public class TestService {
     public TestInnerPageResponse getTestById(Long id) {
         Test test = testRepository.findById(id)
                 .orElseThrow(() -> {
+                    log.error("Test with id {} not found", id);
                     throw new NotFoundException(String.format("Test with id %s not found", id));
                 });
         TestInnerPageResponse testInnerPageResponse = new TestInnerPageResponse(test);
