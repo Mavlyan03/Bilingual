@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("client/test/api")
+@RequestMapping("api/client/test")
 @PreAuthorize("hasAuthority('CLIENT')")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Client API", description = "CLIENT pass test endpoints")

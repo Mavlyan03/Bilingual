@@ -27,7 +27,10 @@ public class TestService {
     @Transactional
     public SimpleResponse enableDisable(Long id) {
         Test test = testRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Test not found"));
+                () -> {
+                    log.error("Test with id {} not found", id);
+                    throw new NotFoundException("Test not found");
+                });
         test.setIsActive(!test.getIsActive());
         log.info("Switch test successfully");
         if (test.getIsActive()) {
@@ -46,7 +49,10 @@ public class TestService {
 
     public TestResponse updateTest(Long id, TestRequest testRequest) {
         Test test = testRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Test not found"));
+                () -> {
+                    log.error("Test with id {} not found", id);
+                    throw new NotFoundException("Test not found");
+                });
         testRepository.updateTest(
                 test.getId(),
                 testRequest.getTitle(),
@@ -60,7 +66,10 @@ public class TestService {
 
     public SimpleResponse deleteTest(Long id) {
         Test test = testRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Test not found"));
+                () -> {
+                    log.error("Test with id {} not found", id);
+                    throw new NotFoundException("Test not found");
+                });
         testRepository.delete(test);
         log.info("Test deleted successfully");
         return new SimpleResponse("Test deleted successfully");
@@ -73,8 +82,10 @@ public class TestService {
 
     public TestInnerPageResponse getTestById(Long id) {
         Test test = testRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException
-                (String.format("Test with id %s not found", id)));
+                .orElseThrow(() -> {
+                    log.error("Test with id {} not found", id);
+                    throw new NotFoundException(String.format("Test with id %s not found", id));
+                });
         TestInnerPageResponse testInnerPageResponse = new TestInnerPageResponse(test);
         List<QuestionTestResponse> questions = questionRepository.getAllQuestionsByTestId(test.getId());
         testInnerPageResponse.setQuestionTestResponses(questions);

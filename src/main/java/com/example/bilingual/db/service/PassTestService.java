@@ -37,9 +37,15 @@ public class PassTestService {
         Result result = new Result();
         User user = (User) authentication.getPrincipal();
         Client client = clientRepository.findClientByUserEmail(user.getEmail()).
-                orElseThrow(() -> new NotFoundException("Client not found"));
+                orElseThrow(() -> {
+                    log.error("Client with email {} not found", user.getEmail());
+                    throw new NotFoundException("Client not found");
+                });
         Test test = testRepository.findById(testRequest.getTestId()).
-                orElseThrow(() -> new NotFoundException("Test not found"));
+                orElseThrow(() -> {
+                    log.error("Test with id {} not found", testRequest.getTestId());
+                    throw new NotFoundException("Test not found");
+                });
         result.setClient(client);
         result.setTest(test);
         result.setDateOfSubmission(LocalDateTime.now());
@@ -47,7 +53,10 @@ public class PassTestService {
         List<QuestionAnswer> answers = new ArrayList<>();
         for (QuestionAnswerRequest questions : testRequest.getQuestions()) {
             Question question = questionRepository.findById(questions.getQuestionId()).
-                    orElseThrow(() -> new NotFoundException("Question not found"));
+                    orElseThrow(() -> {
+                        log.error("Question with id {} not found", questions.getQuestionId());
+                        throw new NotFoundException("Question not found");
+                    });
             if (question.getQuestionType().equals(QuestionType.SELECT_THE_REAL_ENGLISH_WORDS) ||
                     question.getQuestionType().equals(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORDS) ||
                     question.getQuestionType().equals(QuestionType.SELECT_THE_BEST_TITLE) ||
@@ -75,7 +84,10 @@ public class PassTestService {
                 Set<Option> options = new HashSet<>();
                 for (Long id : questions.getOptions()) {
                     Option option = optionRepository.findById(id).orElseThrow(
-                            () -> new NotFoundException("Option not found"));
+                            () -> {
+                                log.error("Option with id {} not found", id);
+                                throw new NotFoundException("Option not found");
+                            });
                     if (option.getIsTrue().equals(true)) {
                         countOfCorrectOptions++;
                     } else {

@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/test")
+@RequestMapping("api/test")
 @PreAuthorize("hasAuthority('ADMIN')")
 @CrossOrigin(origins = "*",maxAge = 3600)
 @Tag(name = "Test API",description = "ADMIN test endpoints")
@@ -58,7 +58,7 @@ public class TestApi {
         return testService.enableDisable(id);
     }
 
-    @GetMapping("/test/{id}")
+    @GetMapping("/{id}")
     @Operation(summary = "Test inner page",
             description = "ADMIN can get test inner page")
     public TestInnerPageResponse getTestById(@PathVariable Long id) {

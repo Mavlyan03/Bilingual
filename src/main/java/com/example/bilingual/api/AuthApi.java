@@ -17,7 +17,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping("api/auth")
 @CrossOrigin(origins = "*",maxAge = 3600)
 @Tag(name = "Auth API", description = "User can sign in and sign up")
 public class AuthApi {

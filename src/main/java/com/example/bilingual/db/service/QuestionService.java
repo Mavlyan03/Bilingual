@@ -36,7 +36,10 @@ public class QuestionService {
 
     public SimpleResponse saveQuestion(QuestionRequest questionRequest) {
         Test test = testRepository.findById(questionRequest.getTestId()).orElseThrow(
-                () -> new NotFoundException("Test not found"));
+                () -> {
+                    log.error("Test not found");
+                    throw new NotFoundException("Test not found");
+                });
 
         if (questionRequest.getDuration().equals(0) || questionRequest.getDuration() == null) {
             throw new BadRequestException("The duration shouldn't be zero or null");
@@ -218,8 +221,10 @@ public class QuestionService {
 
     public SimpleResponse deleteQuestion(Long id) {
         Question question = questionRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(
-                        String.format("Question with id %s not found", id)));
+                () -> {
+                    log.error("Question with id {} not found", id);
+                    throw new NotFoundException(String.format("Question with id %s not found", id));
+                });
         question.setTest(null);
         questionRepository.delete(question);
         log.info("Question deleted successfully");
@@ -228,8 +233,10 @@ public class QuestionService {
 
     public QuestionResponse getById(Long id) {
         Question question = questionRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(
-                        String.format("Question with id %s not found", id)));
+                () -> {
+                    log.error("Question with id {} not found", id);
+                    throw new NotFoundException(String.format("Question with id %s not found", id));
+                });
         List<OptionResponse> options = optionRepository.getOptionsByQuestionId(question.getId());
         QuestionResponse questionResponse = new QuestionResponse(question);
         questionResponse.setOptionResponses(options);
@@ -240,8 +247,10 @@ public class QuestionService {
     @Transactional
     public SimpleResponse enableDisable(Long id) {
         Question question = questionRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(
-                        String.format("Question with id %s not found", id)));
+                () -> {
+                    log.error("Question with id {} not found", id);
+                    throw new NotFoundException(String.format("Question with id %s not found", id));
+                });
         question.setIsActive(!question.getIsActive());
         log.info("Switch question successfully");
         if (question.getIsActive()) {
@@ -258,9 +267,8 @@ public class QuestionService {
                         String.format("Question with id %s not found", question.getId())));
         List<OptionResponse> options = optionRepository.getOptionsByQuestionId(question1.getId());
 
-
         for (OptionRequest o : question.getOptionRequests()) {
-            if(o.getOption() != null || !o.getOption().isEmpty()) {
+            if (o.getOption() != null || !o.getOption().isEmpty()) {
                 Option option = new Option(o);
                 question1.getOptions().add(option);
                 option.setQuestion(question1);
@@ -284,11 +292,17 @@ public class QuestionService {
                         }
                     }
                     Option option = optionRepository.findById(id).orElseThrow(
-                            () -> new NotFoundException("Option with id %s not found"));
+                            () -> {
+                                log.error("Option with id {} not found", id);
+                                throw new NotFoundException("Option with id %s not found");
+                            });
                     option.setIsTrue(true);
-                } else if(id.equals(o.getId())) {
+                } else if (id.equals(o.getId())) {
                     Option option = optionRepository.findById(o.getId()).orElseThrow(
-                            () -> new NotFoundException("Option with id %s not found"));
+                            () -> {
+                                log.error("Option with id {} not found", o.getId());
+                                throw new NotFoundException("Option with id %s not found");
+                            });
                     option.setIsTrue(!option.getIsTrue());
                 }
             }
@@ -302,7 +316,7 @@ public class QuestionService {
                 question.getCorrectAnswer(),
                 question.getNumberOfReplays(),
                 question.getMinNumberOfWords());
-        if(question1.getContent() == null) {
+        if (question1.getContent() == null) {
             question1.setContent(null);
         } else {
             question1.getContent().setContent(question.getContent());
