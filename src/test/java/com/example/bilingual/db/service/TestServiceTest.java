@@ -3,13 +3,18 @@ package com.example.bilingual.db.service;
 import com.example.bilingual.db.repository.TestRepository;
 import com.example.bilingual.dto.request.TestRequest;
 import com.example.bilingual.dto.response.SimpleResponse;
+import com.example.bilingual.dto.response.TestInnerPageResponse;
 import com.example.bilingual.dto.response.TestResponse;
+import com.example.bilingual.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 
+import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -67,13 +72,28 @@ class TestServiceTest {
 
     @Test
     void deleteTest() {
+        SimpleResponse response = testService.deleteTest(1L);
+
+        assertNotNull(response);
+        assertThatThrownBy(() -> testService.getTestById(1L)).isInstanceOf(NotFoundException.class)
+                .hasMessageContaining("Test with id 1 not found");
     }
 
     @Test
     void getAllTests() {
+        List<TestResponse> all = testService.getAllTests();
+
+        assertNotNull(all);
+        assertEquals(2, all.size());
     }
 
     @Test
     void getTestById() {
+        com.example.bilingual.db.model.Test test1 = testRepository.findById(1L).orElseThrow();
+        TestInnerPageResponse test = testService.getTestById(1L);
+
+        assertEquals(test.getId(), 1L);
+        assertEquals(test.getTitle(), test1.getTitle());
+        assertEquals(test.getDescription(), test1.getDescription());
     }
 }
