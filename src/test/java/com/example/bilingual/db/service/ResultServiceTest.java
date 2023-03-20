@@ -79,8 +79,4 @@ class ResultServiceTest {
         assertEquals(result.getFinalStatus(), result1.getStatus());
         assertEquals(result.getDateOfSubmission(), result1.getDateOfSubmission());
     }
-
-    @Test
-    void getAnswer() {
-    }
 }
